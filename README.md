@@ -82,10 +82,10 @@ Searches your vault using qmd's hybrid search and presents relevant notes with e
 ```
 Phase 1: Analysis (Parallel)
 ┌──────────────────┬──────────────────┐
-│  session-writer   │  til-writer      │  sonnet
+│  session-drafter   │  til-drafter      │  sonnet
 │  (session report) │  (learnings)     │
 ├──────────────────┼──────────────────┤
-│  task-writer      │  idea-writer     │  sonnet / opus
+│  task-drafter      │  idea-drafter     │  sonnet / opus
 │  (follow-ups)     │  (creative ideas)│
 └──────────────────┴──────────────────┘
                     │
@@ -110,10 +110,10 @@ Phase 2: Validation (Sequential)
 
 | Agent | Model | Purpose |
 |-------|-------|---------|
-| `session-writer` | sonnet | Compose structured session report |
-| `til-writer` | sonnet | Extract learnings as TIL notes |
-| `task-writer` | sonnet | Identify follow-up tasks with priorities |
-| `idea-writer` | opus | Generate creative ideas and visual diagrams |
+| `session-drafter` | sonnet | Compose structured session report |
+| `til-drafter` | sonnet | Extract learnings as TIL notes |
+| `task-drafter` | sonnet | Identify follow-up tasks with priorities |
+| `idea-drafter` | opus | Generate creative ideas and visual diagrams |
 | `note-reviewer` | sonnet | Validate, deduplicate, and finalize all notes |
 
 ## Skills

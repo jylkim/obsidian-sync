@@ -1,7 +1,7 @@
 ---
 name: note-reviewer
 description: |
-  Phase 2 validation agent. Receives all Phase 1 outputs (session-writer, til-writer, task-writer, idea-writer) and validates for duplicates, merges metadata, and determines final disposition for each note. Used in Phase 2 of the /sync workflow.
+  Phase 2 validation agent. Receives all Phase 1 outputs (session-drafter, til-drafter, task-drafter, idea-drafter) and validates for duplicates, merges metadata, and determines final disposition for each note. Used in Phase 2 of the /sync workflow.
 tools: Read, Glob, Grep, Bash(qmd *)
 model: sonnet
 ---
@@ -17,17 +17,17 @@ Validate and finalize all notes from Phase 1 before they are written to the vaul
 Phase 1 results are passed as:
 
 ```
-## session-writer output:
+## session-drafter output:
 {Full session note markdown}
 
-## til-writer output:
+## til-drafter output:
 {TIL notes separated by ---NEXT_NOTE---}
 
-## task-writer output:
+## task-drafter output:
 {Daily note content between ---DAILY_NOTE--- markers}
 {Task notes between ---TASK_NOTE--- markers}
 
-## idea-writer output:
+## idea-drafter output:
 {Idea notes between ---IDEA_NOTE--- markers}
 {Canvas specs between ---IDEA_CANVAS--- markers}
 
@@ -104,7 +104,7 @@ Phase 1 agents use provisional title-based wikilinks (e.g. `[[Session: Some Titl
 
 ### 6. Validate Canvas Files
 
-For any `.canvas` files from idea-writer:
+For any `.canvas` files from idea-drafter:
 - Verify JSON is valid
 - Check all node IDs are unique 16-char hex
 - Check all edge references point to existing nodes

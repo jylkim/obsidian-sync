@@ -25,9 +25,9 @@ Step 1: Gather Session Context
          ↓
 Step 2: Phase 1 — 4 Agents in Parallel
   ┌──────────────────┬──────────────────┐
-  │  session-writer   │  til-writer      │  (sonnet)
+  │  session-drafter   │  til-drafter      │  (sonnet)
   ├──────────────────┼──────────────────┤
-  │  task-writer      │  idea-writer     │  (sonnet / opus)
+  │  task-drafter      │  idea-drafter     │  (sonnet / opus)
   └──────────────────┴──────────────────┘
          ↓ (collect all results)
 Step 3: Phase 2 — note-reviewer Sequential
@@ -93,25 +93,25 @@ Launch 4 agents simultaneously in a single message. All receive the same session
 
 ```
 Agent(
-    subagent_type="obsidian-sync:session-writer",
+    subagent_type="obsidian-sync:session-drafter",
     description="Session report note",
     prompt="[Session Context]\n\nGenerate a session report note for Obsidian."
 )
 
 Agent(
-    subagent_type="obsidian-sync:til-writer",
+    subagent_type="obsidian-sync:til-drafter",
     description="TIL learning notes",
     prompt="[Session Context]\n\nExtract learnings and compose TIL notes."
 )
 
 Agent(
-    subagent_type="obsidian-sync:task-writer",
+    subagent_type="obsidian-sync:task-drafter",
     description="Follow-up task notes",
     prompt="[Session Context]\n\nIdentify follow-up tasks and format for Obsidian."
 )
 
 Agent(
-    subagent_type="obsidian-sync:idea-writer",
+    subagent_type="obsidian-sync:idea-drafter",
     description="Creative idea notes",
     prompt="[Session Context]\n\nGenerate creative ideas inspired by this session."
 )
@@ -121,10 +121,10 @@ Agent(
 
 | Agent | Model | Purpose | Output |
 |-------|-------|---------|--------|
-| session-writer | sonnet | Session report | 1 session note |
-| til-writer | sonnet | Learnings | 0–N TIL notes |
-| task-writer | sonnet | Follow-up tasks | Daily note tasks + 0–N task notes |
-| idea-writer | opus | Creative ideas | 0–N idea notes + optional .canvas |
+| session-drafter | sonnet | Session report | 1 session note |
+| til-drafter | sonnet | Learnings | 0–N TIL notes |
+| task-drafter | sonnet | Follow-up tasks | Daily note tasks + 0–N task notes |
+| idea-drafter | opus | Creative ideas | 0–N idea notes + optional .canvas |
 
 Agents that find nothing to write return "No {type} notes for this session."
 
@@ -141,17 +141,17 @@ Agent(
     prompt="""
 Validate Phase 1 outputs for the Obsidian vault.
 
-## session-writer output:
-{session-writer results}
+## session-drafter output:
+{session-drafter results}
 
-## til-writer output:
-{til-writer results}
+## til-drafter output:
+{til-drafter results}
 
-## task-writer output:
-{task-writer results}
+## task-drafter output:
+{task-drafter results}
 
-## idea-writer output:
-{idea-writer results}
+## idea-drafter output:
+{idea-drafter results}
 
 ## Config:
 vault_name: {vault_name}

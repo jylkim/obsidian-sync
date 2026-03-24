@@ -1,5 +1,5 @@
 ---
-name: task-writer
+name: task-drafter
 description: |
   Identify incomplete work, follow-up tasks, and action items from a session. Produces task items for Obsidian daily notes and standalone task notes for complex items. Used in Phase 1 of the /sync workflow.
 tools: Read, Glob, Grep

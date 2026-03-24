@@ -23,10 +23,10 @@ Templates for each note type produced by the /sync workflow. Agents reference th
 
 | Callout | Purpose | Agent |
 |---------|---------|-------|
-| `> [!summary]` | Session overview | session-writer |
-| `> [!tip]` | Key insight | til-writer |
-| `> [!todo]` | Next action | task-writer |
-| `> [!spark]` | Inspiration source | idea-writer |
+| `> [!summary]` | Session overview | session-drafter |
+| `> [!tip]` | Key insight | til-drafter |
+| `> [!todo]` | Next action | task-drafter |
+| `> [!spark]` | Inspiration source | idea-drafter |
 | `> [!question]` | Open question | any |
 
 ### Wikilink Patterns

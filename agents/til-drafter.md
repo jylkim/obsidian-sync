@@ -1,5 +1,5 @@
 ---
-name: til-writer
+name: til-drafter
 description: |
   Extract learnings, discoveries, and mistakes from a session and compose TIL (Today I Learned) notes for Obsidian. Each distinct learning becomes its own note. Used in Phase 1 of the /sync workflow.
 tools: Read, Glob, Grep
