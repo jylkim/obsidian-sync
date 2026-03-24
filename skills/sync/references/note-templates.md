@@ -1,0 +1,217 @@
+# Note Templates Reference
+
+Templates for each note type produced by the /sync workflow. Agents reference these for consistent formatting.
+
+## Frontmatter Field Reference
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| title | string | Yes | Descriptive title |
+| date | date | Yes | YYYY-MM-DD format |
+| tags | list | Yes | Always includes `claude-code` |
+| type | string | Yes | `session-note`, `learning`, `task`, or `idea` |
+| project | string | Session only | Working directory name |
+| source | wikilink | TIL only | Links to session note |
+| priority | string | Task only | P0, P1, P2, P3 |
+| status | string | Task only | open, in-progress, done |
+| category | string | Idea only | architecture, product, workflow, exploration |
+| canvas | wikilink | Idea only | Links to .canvas file if exists |
+
+## Obsidian Formatting Conventions
+
+### Callout Types Used
+
+| Callout | Purpose | Agent |
+|---------|---------|-------|
+| `> [!summary]` | Session overview | session-writer |
+| `> [!tip]` | Key insight | til-writer |
+| `> [!todo]` | Next action | task-writer |
+| `> [!spark]` | Inspiration source | idea-writer |
+| `> [!question]` | Open question | any |
+
+### Wikilink Patterns
+
+- `[[Session: YYYY-MM-DD description]]` — link to session note
+- `[[Concept Name]]` — link to a concept (creates if doesn't exist)
+- `[[#Heading]]` — link within the same note
+
+### Tag Conventions
+
+- `#claude-code` — on every generated note
+- `#session`, `#learning`, `#task`, `#idea` — type tags
+- `#{technology}` — e.g., `#python`, `#react`, `#sqlite`
+- `#P0` through `#P3` — priority tags on tasks in daily notes
+
+## Session Note Template
+
+```markdown
+---
+title: "Session: {brief description}"
+date: {YYYY-MM-DD}
+project: {project name}
+tags:
+  - claude-code
+  - session
+  - {topic tags}
+type: session-note
+---
+
+# {Brief Description}
+
+> [!summary]
+> {2-3 sentence overview}
+
+## Accomplishments
+
+- {Specific accomplishment}
+
+## Problems & Solutions
+
+### {Problem Title}
+
+**Problem**: {description}
+**Solution**: {how it was resolved}
+**Takeaway**: {lesson for next time}
+
+## Decisions
+
+- **{Decision}**: {choice} — because {reason}
+
+## Open Questions
+
+- {Unresolved question}
+
+## Related
+
+- [[{wikilink}]]
+```
+
+## Learning Note (TIL) Template
+
+```markdown
+---
+title: "{Concise learning title}"
+date: {YYYY-MM-DD}
+tags:
+  - claude-code
+  - learning
+  - {technology tag}
+type: learning
+source: "[[Session: {description}]]"
+---
+
+# {Concise Learning Title}
+
+> [!tip] Key Insight
+> {One sentence takeaway}
+
+## Context
+
+{When and why this came up}
+
+## What I Learned
+
+{Technical explanation}
+
+```{language}
+{Code example}
+```
+
+## Gotchas
+
+- {Pitfall to watch for}
+
+## Related
+
+- [[{wikilink}]]
+```
+
+## Task Note Template
+
+```markdown
+---
+title: "Task: {descriptive title}"
+date: {YYYY-MM-DD}
+tags:
+  - claude-code
+  - task
+  - {topic tag}
+type: task
+priority: {P0|P1|P2|P3}
+status: open
+---
+
+# {Descriptive Title}
+
+> [!todo] Next Action
+> {Specific first step}
+
+## Context
+
+{Background and motivation}
+
+## Steps
+
+- [ ] {Step 1}
+- [ ] {Step 2}
+- [ ] {Step 3}
+
+## Related Files
+
+- `{path/to/file}` — {relevance}
+
+## Notes
+
+{Additional context}
+```
+
+## Idea Note Template
+
+```markdown
+---
+title: "Idea: {compelling title}"
+date: {YYYY-MM-DD}
+tags:
+  - claude-code
+  - idea
+  - {category tag}
+type: idea
+category: {architecture|product|workflow|exploration}
+canvas: "[[{canvas-filename}]]"
+---
+
+# {Compelling Title}
+
+> [!spark] Inspiration
+> {What triggered this idea}
+
+## Core Idea
+
+{Clear explanation}
+
+## Why It Matters
+
+{Problem solved or opportunity created}
+
+## Possible Approach
+
+{Concrete first steps}
+
+## Open Questions
+
+- {Key uncertainty}
+
+## Related
+
+- [[{wikilink}]]
+```
+
+## Daily Note Task Format
+
+```markdown
+## Follow-ups from {project name}
+
+- [ ] #P0 {description} [[{related note}]]
+- [ ] #P1 {description}
+- [ ] #P2 {description}
+```

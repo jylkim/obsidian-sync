@@ -1,0 +1,23 @@
+# obsidian-sync configuration
+# This template is used by /obsidian-config to generate your config.
+# Config is saved to ~/.claude/plugins/obsidian-sync/config.yaml
+
+# Obsidian vault name (used for `obsidian` CLI vault= parameter)
+vault_name: ""
+
+# Absolute path to your vault (used for direct file write fallback)
+vault_path: ""
+
+# qmd collection name for indexing and search
+qmd_collection: ""
+
+# Folder structure within the vault
+folders:
+  sessions: "Claude/Sessions"
+  learnings: "Claude/Learnings"
+  tasks: "Claude/Tasks"
+  ideas: "Claude/Ideas"
+
+# Tags applied to all generated notes
+default_tags:
+  - claude-code
