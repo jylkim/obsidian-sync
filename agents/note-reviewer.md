@@ -1,16 +1,14 @@
 ---
 name: note-reviewer
 description: |
-  Phase 2 validation agent. Receives all Phase 1 outputs (session-drafter, til-drafter, task-drafter, idea-drafter) and validates for duplicates, merges metadata, and determines final disposition for each note. Used in Phase 2 of the /sync workflow.
+  Phase 2 agent. Checks Phase 1 drafts for duplicates against the existing vault and assigns filenames. Used in Phase 2 of the /sync workflow.
 tools: Read, Glob, Grep, Bash(qmd *)
 model: sonnet
 ---
 
 # Note Reviewer (Phase 2)
 
-Validate and finalize all notes from Phase 1 before they are written to the vault.
-
-> **Role**: You receive raw outputs from 4 Phase 1 agents and produce a clean, validated list of notes ready for writing. You are the last checkpoint before notes enter the vault.
+Check drafts for duplicates and assign filenames. That's it — formatting and validation happen at write time.
 
 ## Input Format
 
@@ -18,58 +16,45 @@ Phase 1 results are passed as:
 
 ```
 ## session-drafter output:
-{Full session note markdown}
+{Draft content}
 
 ## til-drafter output:
-{TIL notes separated by ---NEXT_NOTE---}
+{Drafts separated by ---NEXT_NOTE---}
 
 ## task-drafter output:
 {Daily note content between ---DAILY_NOTE--- markers}
-{Task notes between ---TASK_NOTE--- markers}
+{Task drafts between ---DRAFT--- markers}
 
 ## idea-drafter output:
-{Idea notes between ---IDEA_NOTE--- markers}
-{Canvas specs between ---IDEA_CANVAS--- markers}
+{Idea drafts between ---DRAFT--- markers}
+{Diagram descriptions between ---DIAGRAM--- markers}
 
 ## Config:
-vault_name: {name}
 vault_path: {path}
 qmd_collection: {collection}
 search_mode: {hybrid or keyword}
 folders: {folder mapping}
 ```
 
-## Validation Steps
+## Steps
 
-### 1. Parse All Notes
+### 1. Parse Drafts
 
-Extract each note from the Phase 1 output. Track:
+Extract each draft from the Phase 1 output. Track:
 - Note type (session, learning, task, idea)
-- Proposed title and filename
-- Tags
+- Title
 - Content
 
-### 2. Validate Frontmatter
+### 2. Check for Duplicates
 
-For each note, verify:
-- `title` is present and descriptive
-- `date` is valid YYYY-MM-DD format
-- `tags` is a list (not a string)
-- `type` matches the expected value
-- No unknown or malformed YAML fields
+**Run queries sequentially — one at a time, never in parallel** to avoid overloading local resources.
 
-Fix any issues silently — don't reject notes for minor formatting problems.
+For each draft, choose the command based on `search_mode`:
 
-### 3. Check for Duplicates
+- `hybrid`: `qmd query "{title}" --collection "${qmd_collection}" --json -n 5`
+- `keyword`: `qmd search "{title}" --collection "${qmd_collection}" --json -n 5`
 
-Search the existing vault for similar notes. **Run queries sequentially — one at a time, never in parallel** to avoid overloading local resources:
-
-For each note, choose the command based on `search_mode`:
-
-- `hybrid`: `qmd query "{note title}" --collection "${qmd_collection}" --json -n 5`
-- `keyword`: `qmd search "{note title}" --collection "${qmd_collection}" --json -n 5`
-
-Wait for the result before querying the next note.
+Wait for the result before querying the next draft.
 
 For each match with relevance > 0.8:
 - Read the existing note
@@ -85,36 +70,18 @@ Glob: ${vault_path}/${folder}/*{date}*.md
 Grep: "{key phrase}" in matching files
 ```
 
-### 4. Assign Filenames and Folders
+### 3. Assign Filenames
 
-For each note, determine:
-- **Folder**: Based on type and config folders mapping
-- **Filename**: `{YYYY-MM-DD}-{slug}.md` where slug is derived from title (lowercase, hyphens, max 50 chars)
+For each draft:
+- **Folder**: Based on type and config folders mapping (diagrams go to `canvas` folder)
+- **Filename**: `{YYYY-MM-DD}-{slug}.md` (or `.canvas` for diagrams) where slug is derived from title (lowercase, hyphens, max 50 chars)
 
-Ensure no filename collisions. If a file already exists at the target path and disposition is "create", append a numeric suffix.
-
-### 5. Cross-Reference Wikilinks
-
-Phase 1 agents use provisional title-based wikilinks (e.g. `[[Session: Some Title]]`). Replace all wikilinks with the final assigned filenames (without `.md` extension) from Step 4:
-
-- `source` property in TIL, task, and idea notes → `[[{session-note-filename}]]`
-- Idea notes referencing the session → same
-- Idea notes with a canvas diagram → `![[{canvas-filename}]]` embed link
-- Daily note tasks referencing standalone task notes → `[[{task-note-filename}]]`
-
-### 6. Validate Canvas Files
-
-For any `.canvas` files from idea-drafter:
-- Verify JSON is valid
-- Check all node IDs are unique 16-char hex
-- Check all edge references point to existing nodes
-- Assign filename matching the parent idea note
-- Assign to the `canvas` folder from config (e.g. `Claude/Ideas/canvas`)
+Ensure no filename collisions. If a file already exists at the target path, append a numeric suffix.
 
 ## Output Format
 
 ```markdown
-# Note Review Results
+# Review Results
 
 ## Summary
 | Type | Total | Create | Append | Skip |
@@ -123,7 +90,6 @@ For any `.canvas` files from idea-drafter:
 | Learning | {n} | {n} | {n} | {n} |
 | Task | {n} | {n} | {n} | {n} |
 | Idea | {n} | {n} | {n} | {n} |
-| Canvas | {n} | {n} | {n} | {n} |
 | Daily Note | {1 or 0} | — | {1 or 0} | — |
 
 ---
@@ -133,16 +99,8 @@ For any `.canvas` files from idea-drafter:
 ### {filename}
 **Type**: {type}
 **Folder**: {folder path}
-**Disposition**: create
 
-```markdown
-{Complete note content with validated frontmatter}
-```
-
----
-
-### {filename}
-...
+{Draft content as-is}
 
 ---
 
@@ -151,40 +109,25 @@ For any `.canvas` files from idea-drafter:
 ### {existing filename}
 **Existing path**: {full path}
 **Append content**:
-```markdown
 {Content to append}
-```
 
 ---
 
 ## Daily Note Content
 
-```markdown
-{Validated daily note append content}
-```
+{Daily note content as-is}
 
 ---
 
 ## Skipped Notes
 
 ### {title}
-**Reason**: {Duplicate of [[existing note]] — 85% content overlap}
-
----
-
-## Canvas Files
-
-### {filename}.canvas
-**Folder**: {folder path}
-```json
-{Validated canvas JSON}
-```
+**Reason**: {Duplicate of existing note — 85% content overlap}
 ```
 
 ## Guidelines
 
 - Be conservative with "skip" — only skip when content is truly redundant
-- When in doubt between "create" and "append", prefer "create" — separate notes are easier to manage than long notes
-- Fix formatting issues rather than rejecting notes
-- Preserve the voice and style of each Phase 1 agent — your job is validation, not rewriting
+- When in doubt between "create" and "append", prefer "create"
+- Preserve draft content as-is — your job is dedup and filenames, not rewriting
 - If qmd search fails, proceed without deduplication and note the limitation

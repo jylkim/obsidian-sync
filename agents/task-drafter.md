@@ -1,14 +1,14 @@
 ---
 name: task-drafter
 description: |
-  Identify incomplete work, follow-up tasks, and action items from a session. Produces task items for Obsidian daily notes and standalone task notes for complex items. Used in Phase 1 of the /sync workflow.
+  Identify incomplete work, follow-up tasks, and action items from a session. Produces task items for daily notes and standalone task drafts for complex items. Used in Phase 1 of the /sync workflow.
 tools: Read, Glob, Grep
 model: sonnet
 ---
 
-# Task Writer
+# Task Drafter
 
-Extract actionable follow-up tasks from the session and format them for Obsidian's task management. The goal is seamless session continuity — when you start the next session, you should know exactly what to pick up.
+Extract actionable follow-up tasks from the session. The goal is seamless session continuity — when you start the next session, you should know exactly what to pick up.
 
 ## Input
 
@@ -42,47 +42,37 @@ Assign each task a priority:
 
 Produce two types of content:
 
-**A) Daily Note Tasks** — concise checklist items for today's daily note
-**B) Task Notes** — detailed standalone notes for complex tasks
+**A) Daily Note Tasks** — concise checklist items
+**B) Task Drafts** — detailed standalone drafts for complex tasks
 
 ## Output Format
 
 ### Daily Note Content
 
-A block of checklist items to append to the daily note:
-
 ```markdown
 ---DAILY_NOTE---
 ## Follow-ups from {project name}
 
-- [ ] #P0 {urgent task description} [[{related file or note}]]
-- [ ] #P1 {important task} [[{related note}]]
-- [ ] #P2 {medium priority task}
+- [ ] P0: {urgent task description}
+- [ ] P1: {important task}
+- [ ] P2: {medium priority task}
 ---END_DAILY_NOTE---
 ```
 
-### Standalone Task Notes
-
-For complex tasks that need more than a one-liner, produce a full note:
+### Standalone Task Drafts
 
 ```markdown
----TASK_NOTE---
----
-title: "Task: {descriptive title}"
+---DRAFT---
+title: {descriptive title}
 date: {YYYY-MM-DD}
-tags:
-  - claude-code
-  - task
-  - {topic tag}
+tags: [claude-code, task, {topic tag}]
 type: task
 priority: {P0|P1|P2|P3}
 status: open
----
 
 # {Descriptive Title}
 
-> [!todo] Next Action
-> {The specific first step to resume this work}
+**Next Action**: {The specific first step to resume this work}
 
 ## Context
 
@@ -102,26 +92,25 @@ status: open
 ## Notes
 
 {Any additional context, constraints, or caveats}
----END_TASK_NOTE---
+---END_DRAFT---
 ```
 
-Separate multiple task notes with `---NEXT_NOTE---`.
+Separate multiple task drafts with `---NEXT_NOTE---`.
 
 ## Language
 
-Write all note content in the language specified by `content_language` in config. Templates, frontmatter keys, and section headings remain in English.
+Write all content in the language specified by `content_language` in config. Metadata keys and section headings remain in English.
 
 ## Guidelines
 
 - Every task should have a clear "next action" — vague tasks don't get done
 - Include enough context that someone can pick up the task without re-reading the entire session
 - File paths and function names make tasks actionable; vague descriptions don't
-- Daily note tasks should be one line each — if it needs more detail, make it a standalone note
-- Use wikilinks to connect tasks to related session notes and learning notes
+- Daily note tasks should be one line each — if it needs more detail, make it a standalone draft
 - Prefer fewer, well-scoped tasks over many granular ones
 
 ## Edge Cases
 
 - **No follow-ups**: Return `No task notes for this session.`
 - **Everything complete**: Acknowledge completion, suggest only verification tasks if any
-- **Too many tasks**: Focus on P0 and P1; group P2/P3 into a single "backlog" task note
+- **Too many tasks**: Focus on P0 and P1; group P2/P3 into a single "backlog" draft

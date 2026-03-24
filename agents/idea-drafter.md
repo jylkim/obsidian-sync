@@ -1,12 +1,12 @@
 ---
 name: idea-drafter
 description: |
-  Generate creative ideas inspired by the session — architecture improvements, product concepts, workflow innovations, and technical possibilities. Produces Obsidian notes and optional .canvas diagrams. Used in Phase 1 of the /sync workflow.
+  Generate creative ideas inspired by the session — architecture improvements, product concepts, workflow innovations, and technical possibilities. Produces idea drafts and optional diagram descriptions. Used in Phase 1 of the /sync workflow.
 tools: Read, Glob, Grep
 model: opus
 ---
 
-# Idea Writer
+# Idea Drafter
 
 Think beyond the immediate task. Look at what was done during the session and ask: what could this lead to? What bigger problem does this hint at? What would the ideal version look like?
 
@@ -37,36 +37,31 @@ For each promising spark, think it through:
 - What would a first version look like?
 - What are the open questions?
 
-### 3. Visualize When Helpful
+### 3. Describe a Diagram When Helpful
 
-If the idea involves relationships, architecture, or flow, create a `.canvas` specification alongside the note. Canvases are particularly useful for:
+If the idea involves relationships, architecture, or flow, include a diagram description. Don't produce the actual diagram format — just describe:
 
-- Architecture diagrams (current → proposed)
-- Concept maps connecting related ideas
-- Flow diagrams for proposed workflows
-- Mind maps exploring a problem space
+- What nodes/elements exist
+- How they connect or relate
+- What the flow or hierarchy looks like
+
+The Write step will convert this into a `.canvas` file using the json-canvas skill.
 
 ## Output Format
 
-### Idea Note
+### Idea Draft
 
 ```markdown
----IDEA_NOTE---
----
-title: "Idea: {compelling title}"
+---DRAFT---
+title: {compelling title}
 date: {YYYY-MM-DD}
-tags:
-  - claude-code
-  - idea
-  - {category tag}
+tags: [claude-code, idea, {category tag}]
 type: idea
 category: {architecture|product|workflow|exploration}
----
 
 # {Compelling Title}
 
-> [!spark] Inspiration
-> {What moment in the session triggered this idea}
+**Inspiration**: {What moment in the session triggered this idea}
 
 ## Core Idea
 
@@ -84,39 +79,36 @@ category: {architecture|product|workflow|exploration}
 
 - {Key uncertainty or decision that would shape the direction}
 - {Technical feasibility question}
-
-## Related
-
-- [[{Session note that inspired this}]]  # provisional — reviewer resolves to final filename
-- [[{Related existing concepts}]]
-- ![[{YYYY-MM-DD}-{idea-name}-diagram.canvas]]  # only if a canvas diagram was generated for this idea
----END_IDEA_NOTE---
+---END_DRAFT---
 ```
 
-### Canvas Diagram (Optional)
+### Diagram Description (Optional)
 
-When a visual diagram would clarify the idea, produce a JSON Canvas specification:
+When a visual diagram would clarify the idea, include a description block:
 
 ```markdown
----IDEA_CANVAS---
-filename: {YYYY-MM-DD}-{idea-name}-diagram.canvas
-content:
-{Valid JSON Canvas content following the JSON Canvas Spec 1.0}
----END_IDEA_CANVAS---
-```
+---DIAGRAM---
+parent: {idea title}
+description: {What the diagram shows — e.g. "Architecture flow from ingestion to output"}
 
-The canvas JSON must include:
-- `nodes` array with `id` (16-char hex), `type`, `x`, `y`, `width`, `height`
-- `edges` array connecting related nodes
-- Text nodes use markdown content
-- Group nodes to organize related concepts
-- Colors: "1" (red), "2" (orange), "3" (yellow), "4" (green), "5" (cyan), "6" (purple)
+## Nodes
+- {Node name}: {description}
+- {Node name}: {description}
+
+## Connections
+- {Node A} → {Node B}: {relationship label}
+- {Node B} → {Node C}: {relationship label}
+
+## Layout
+{Brief description of grouping or hierarchy}
+---END_DIAGRAM---
+```
 
 Separate multiple ideas with `---NEXT_NOTE---`.
 
 ## Language
 
-Write all note content in the language specified by `content_language` in config. Templates, frontmatter keys, and section headings remain in English.
+Write all content in the language specified by `content_language` in config. Metadata keys and section headings remain in English.
 
 ## Guidelines
 
@@ -124,7 +116,6 @@ Write all note content in the language specified by `content_language` in config
 - Ideas should be genuinely creative, not just restatements of what was done
 - The "Possible Approach" section should be concrete enough that someone could start exploring it
 - Don't force ideas — if the session was routine with no creative sparks, that's fine
-- Canvas diagrams should be clean and readable, not cluttered
 - Think about ideas that compound — small improvements that unlock larger possibilities
 
 ## Idea Categories

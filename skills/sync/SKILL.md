@@ -137,9 +137,9 @@ After all Phase 1 agents complete, pass their combined output to the reviewer:
 ```
 Agent(
     subagent_type="obsidian-sync:note-reviewer",
-    description="Validate and finalize notes",
+    description="Check duplicates and assign filenames",
     prompt="""
-Validate Phase 1 outputs for the Obsidian vault.
+Check drafts for duplicates and assign filenames.
 
 ## session-drafter output:
 {session-drafter results}
@@ -154,19 +154,18 @@ Validate Phase 1 outputs for the Obsidian vault.
 {idea-drafter results}
 
 ## Config:
-vault_name: {vault_name}
 vault_path: {vault_path}
 qmd_collection: {qmd_collection}
+search_mode: {search_mode}
 folders: {folders}
 """
 )
 ```
 
 The note-reviewer:
-1. Validates frontmatter and formatting
-2. Checks for duplicates against existing vault content
-3. Assigns final filenames and folders
-4. Returns a clean list of notes with dispositions (create / append / skip)
+1. Checks for duplicates against existing vault content
+2. Assigns final filenames and folders
+3. Returns drafts with dispositions (create / append / skip)
 
 ---
 
@@ -182,11 +181,25 @@ Use AskUserQuestion to let the user choose which notes to sync. Requirements:
 
 ---
 
-## Step 5: Write Notes
+## Step 5: Format & Write Notes
 
-Write each selected note to the vault using the best available method.
+Convert selected drafts into Obsidian-formatted notes and write to the vault.
 
-### Detect Write Method
+### 5a. Format Drafts → Obsidian Notes
+
+Use the **obsidian-markdown** skill to convert each draft:
+
+- Add YAML frontmatter (title, date, tags, type, etc.)
+- Convert plain text cues to Obsidian syntax (callouts, wikilinks, highlights)
+- Add `source` wikilinks between related notes using filenames from the reviewer
+- Add wikilink embeds for diagram files (`![[{canvas-filename}]]`) in idea notes
+
+For idea drafts that include a `---DIAGRAM---` block, use the **json-canvas** skill to:
+
+- Convert the diagram description into a valid JSON Canvas file
+- Assign to the `canvas` folder from config
+
+### 5b. Detect Write Method
 
 Check if Obsidian is running (CLI requires the app to be open):
 
@@ -197,38 +210,23 @@ pgrep -xi obsidian >/dev/null 2>&1 && obsidian vaults 2>/dev/null
 - If both succeed: use `obsidian` CLI for write operations
 - Otherwise: use direct file write as fallback
 
-### Primary — `obsidian` CLI + obsidian-markdown skills
+### 5c. Write to Vault
 
-Use the `obsidian` CLI skill for vault operations and obsidian-markdown skill patterns for formatting:
+**Primary — `obsidian` CLI**:
 
 ```bash
-# Create a note
 obsidian vault="${vault_name}" create name="${note_name}" content="${content}" silent
-
-# Append to daily note
 obsidian vault="${vault_name}" daily:append content="${daily_tasks}"
-
-# Set properties
 obsidian vault="${vault_name}" property:set name="tags" value="${tags}" file="${note_name}"
 ```
 
-For idea notes with canvas files, use the json-canvas skill:
-```bash
-# Write canvas file to the canvas subfolder
-obsidian vault="${vault_name}" create name="${canvas_folder}/${canvas_filename}" content="${canvas_json}" silent
-```
-
-### Fallback — Direct File Write
-
-When `obsidian` CLI is unavailable or fails:
+**Fallback — Direct File Write**:
 
 ```bash
 mkdir -p "${vault_path}/${folder}"
 ```
 
-Use the Write tool to create files directly at `${vault_path}/${folder}/${filename}.md`. Include frontmatter in the file content since property:set is unavailable.
-
-Note: Daily note append is skipped in fallback mode (cannot reliably locate the daily note file).
+Use the Write tool to create files directly at `${vault_path}/${folder}/${filename}`. Include frontmatter in the file content since property:set is unavailable. Daily note append is skipped in fallback mode.
 
 ### Write Order
 

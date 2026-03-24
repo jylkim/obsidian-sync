@@ -1,14 +1,14 @@
 ---
 name: til-drafter
 description: |
-  Extract learnings, discoveries, and mistakes from a session and compose TIL (Today I Learned) notes for Obsidian. Each distinct learning becomes its own note. Used in Phase 1 of the /sync workflow.
+  Extract learnings, discoveries, and mistakes from a session and compose TIL (Today I Learned) drafts. Each distinct learning becomes its own draft. Used in Phase 1 of the /sync workflow.
 tools: Read, Glob, Grep
 model: sonnet
 ---
 
-# TIL Writer
+# TIL Drafter
 
-Identify valuable lessons from the session and turn each into a standalone learning note. A good TIL is something you'd want to find again when facing a similar problem.
+Identify valuable lessons from the session and turn each into a standalone learning draft. A good TIL is something you'd want to find again when facing a similar problem.
 
 ## Input
 
@@ -41,30 +41,24 @@ Not everything learned is worth a note. Apply these filters:
 - Project-specific configuration that's already in code
 - Things easily found in official documentation
 
-### 3. Compose Each Note
+### 3. Compose Each Draft
 
-Each learning gets its own complete note with frontmatter.
+Each learning gets its own draft.
 
 ## Output Format
 
 For each learning, produce:
 
 ```markdown
----
-title: "{Concise learning title}"
+---DRAFT---
+title: {Concise learning title}
 date: {YYYY-MM-DD}
-tags:
-  - claude-code
-  - learning
-  - {technology or domain tag}
+tags: [claude-code, learning, {technology or domain tag}]
 type: learning
-source: "[[Session: {session description}]]"  # provisional — reviewer resolves to final filename
----
 
 # {Concise Learning Title}
 
-> [!tip] Key Insight
-> {One sentence that captures the essential lesson}
+**Key Insight**: {One sentence that captures the essential lesson}
 
 ## Context
 
@@ -81,28 +75,24 @@ source: "[[Session: {session description}]]"  # provisional — reviewer resolve
 ## Gotchas
 
 - {Pitfall or edge case to watch for}
-
-## Related
-
-- [[{Related concept or note}]]
+---END_DRAFT---
 ```
 
 If there are multiple learnings, separate them with `---NEXT_NOTE---` on its own line.
 
 ## Language
 
-Write all note content in the language specified by `content_language` in config. Templates, frontmatter keys, and section headings remain in English.
+Write all content in the language specified by `content_language` in config. Metadata keys and section headings remain in English.
 
 ## Guidelines
 
 - Write titles as statements, not questions: "SQLite FTS5 requires explicit column weights" not "How does SQLite FTS5 work?"
-- The Key Insight callout should be self-contained and scannable
+- The Key Insight should be self-contained and scannable
 - Code examples should be real, from the session — not hypothetical
-- Link back to the session note using a wikilink in the `source` property
-- Each note should be independently useful — don't assume the reader has context from other notes
+- Each draft should be independently useful — don't assume the reader has context from other notes
 
 ## Edge Cases
 
 - **No learnings**: Return `No learning notes for this session.`
-- **Many small learnings**: Group closely related ones into a single note rather than creating five tiny notes
-- **Partial understanding**: Note what's still unclear using a `> [!question]` callout — partial knowledge is still worth capturing
+- **Many small learnings**: Group closely related ones into a single draft rather than creating five tiny ones
+- **Partial understanding**: Note what's still unclear — partial knowledge is still worth capturing
