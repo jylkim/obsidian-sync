@@ -134,7 +134,8 @@ Your Vault/
     ├── Sessions/     # Session report notes
     ├── Learnings/    # TIL notes
     ├── Tasks/        # Task notes
-    └── Ideas/        # Idea notes + .canvas files
+    └── Ideas/        # Idea notes
+        └── canvas/   # .canvas diagram files
 ```
 
 ## When to Use

@@ -1,6 +1,6 @@
 ---
 name: obsidian-recall
-description: Search and retrieve knowledge from your Obsidian vault using qmd semantic search. Use when the user says "recall", "search my notes", "what did I write about", "find in vault", "look up in obsidian", or asks a question that might be answered by their past notes. This skill is fully independent and can be used at any time, not just during session wrap-up.
+description: Search and retrieve knowledge from the user's Obsidian vault using qmd semantic search. Use proactively whenever past notes, decisions, or context could be relevant — not just on explicit search requests. Triggers include "recall", "search my notes", "what did I write about", "find in vault", "didn't I…", "wasn't there…", referencing prior work, trying to remember something, or starting a task where historical context would reduce rework. When in doubt, search.
 version: 0.1.0
 user-invocable: true
 allowed-tools: Bash(qmd *), Bash(obsidian *), Read, Glob, Grep
@@ -8,7 +8,7 @@ allowed-tools: Bash(qmd *), Bash(obsidian *), Read, Glob, Grep
 
 # Obsidian Recall
 
-Search your Obsidian vault for past knowledge using qmd's hybrid retrieval (BM25 + vector + LLM re-ranking). All search runs locally — no data leaves your machine.
+Search your Obsidian vault for past knowledge using qmd. All search runs locally — no data leaves your machine.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ Search your Obsidian vault for past knowledge using qmd's hybrid retrieval (BM25
 Read: ~/.claude/plugins/obsidian-sync/config.yaml
 ```
 
-Extract `vault_name`, `vault_path`, `qmd_collection`.
+Extract `vault_name`, `vault_path`, `qmd_collection`, `search_mode`.
 
 If config is missing, tell the user:
 ```
@@ -36,15 +36,21 @@ Extract the search intent from the user's message. If the user provided a `/obsi
 
 ### Step 3: Search
 
-**Primary — qmd hybrid search** (best quality):
+Choose the search method based on `search_mode` in config:
+
+#### If `search_mode: hybrid`
 
 ```bash
 qmd query "${query}" --collection "${qmd_collection}" --json -n 10
 ```
 
-This combines keyword matching, semantic similarity, and LLM re-ranking for the most relevant results.
+If hybrid returns fewer than 3 results, supplement with keyword search:
 
-**If hybrid returns fewer than 3 results, supplement with keyword search:**
+```bash
+qmd search "${query}" --collection "${qmd_collection}" --json -n 10
+```
+
+#### If `search_mode: keyword`
 
 ```bash
 qmd search "${query}" --collection "${qmd_collection}" --json -n 10
@@ -89,8 +95,8 @@ If the primary search method fails, fall back gracefully:
 
 | Method | When |
 |--------|------|
-| `qmd query` (hybrid) | Default — best quality |
-| `qmd search` (keyword) | Hybrid returns few results |
+| `qmd query` (hybrid) | `search_mode: hybrid` |
+| `qmd search` (keyword) | `search_mode: keyword`, or hybrid returns few results |
 | `obsidian search` | qmd fails entirely |
 | `Grep` in vault_path | Neither qmd nor `obsidian` CLI available |
 

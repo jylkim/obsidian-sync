@@ -3,7 +3,7 @@ name: obsidian-sync
 description: Sync your current Claude Code session to Obsidian as structured notes. Use when the user says "sync to obsidian", "save session", "write notes to vault", "obsidian sync", or wants to capture session knowledge before ending. Runs a multi-agent pipeline that generates session reports, TIL notes, follow-up tasks, and creative ideas, then writes them to the Obsidian vault. Always use this skill when the user wants to persist session work to their knowledge base.
 version: 0.1.0
 user-invocable: true
-allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Edit, Glob, Grep, Agent, AskUserQuestion
+allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Edit, Glob, Grep, Agent, AskUserQuestion, Skill(obsidian-markdown), Skill(json-canvas)
 ---
 
 # Obsidian Sync
@@ -172,27 +172,13 @@ The note-reviewer:
 
 ## Step 4: Preview & Selection
 
-Present the validated notes to the user:
+Use AskUserQuestion to let the user choose which notes to sync. Requirements:
 
-```
-AskUserQuestion(
-    questions=[{
-        "question": "Select notes to sync to Obsidian:",
-        "header": "Obsidian Sync Preview",
-        "multiSelect": true,
-        "options": [
-            {"label": "{Session note title}", "description": "{folder}/{filename}"},
-            {"label": "{TIL note title}", "description": "{folder}/{filename}"},
-            {"label": "Daily Note tasks", "description": "{N} tasks to append"},
-            {"label": "{Idea note title}", "description": "{folder}/{filename}"},
-            {"label": "Edit before saving", "description": "Review and modify note content"},
-            {"label": "Skip all", "description": "Don't sync anything"}
-        ]
-    }]
-)
-```
-
-If the user selects "Edit before saving", display the note content and allow modifications before proceeding.
+- **Group by type**: one multi-select question per type (Session, Learnings, Tasks, Ideas)
+- **Skip empty types**: only ask about types that have content
+- **Individual selection**: each note is its own option, labeled by title
+- **Content preview**: include the target path and a 2–3 line content excerpt in each option's description so the user can judge without reading the full note
+- If the user provides custom input, display the full note content and allow edits before proceeding
 
 ---
 
@@ -228,8 +214,8 @@ obsidian vault="${vault_name}" property:set name="tags" value="${tags}" file="${
 
 For idea notes with canvas files, use the json-canvas skill:
 ```bash
-# Write canvas file alongside the idea note
-obsidian vault="${vault_name}" create name="${canvas_filename}" content="${canvas_json}" silent
+# Write canvas file to the canvas subfolder
+obsidian vault="${vault_name}" create name="${canvas_folder}/${canvas_filename}" content="${canvas_json}" silent
 ```
 
 ### Fallback — Direct File Write
@@ -259,15 +245,15 @@ Note: Daily note append is skipped in fallback mode (cannot reliably locate the 
 After all notes are written:
 
 ```bash
-# Synchronous — update file index (fast, enables keyword search immediately)
 qmd update --collection "${qmd_collection}"
+```
 
-# Background — generate embeddings (slow, non-blocking)
+If `search_mode` is `hybrid`, also run embedding in the background:
+```bash
 nohup qmd embed --collection "${qmd_collection}" > /dev/null 2>&1 &
 ```
 
-`qmd update` runs synchronously so notes are immediately findable via keyword search.
-`qmd embed` runs in the background since embedding generation takes time.
+If `search_mode` is `keyword`, skip embedding.
 
 If qmd fails, display a warning but do not block — the notes are already saved.
 

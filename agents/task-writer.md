@@ -107,6 +107,10 @@ status: open
 
 Separate multiple task notes with `---NEXT_NOTE---`.
 
+## Language
+
+Write all note content in the language specified by `content_language` in config. Templates, frontmatter keys, and section headings remain in English.
+
 ## Guidelines
 
 - Every task should have a clear "next action" — vague tasks don't get done

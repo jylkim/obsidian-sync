@@ -35,6 +35,7 @@ Phase 1 results are passed as:
 vault_name: {name}
 vault_path: {path}
 qmd_collection: {collection}
+search_mode: {hybrid or keyword}
 folders: {folder mapping}
 ```
 
@@ -61,11 +62,14 @@ Fix any issues silently — don't reject notes for minor formatting problems.
 
 ### 3. Check for Duplicates
 
-Search the existing vault for similar notes:
+Search the existing vault for similar notes. **Run queries sequentially — one at a time, never in parallel** to avoid overloading local resources:
 
-```bash
-qmd query "{note title}" --collection "${qmd_collection}" --json -n 5
-```
+For each note, choose the command based on `search_mode`:
+
+- `hybrid`: `qmd query "{note title}" --collection "${qmd_collection}" --json -n 5`
+- `keyword`: `qmd search "{note title}" --collection "${qmd_collection}" --json -n 5`
+
+Wait for the result before querying the next note.
 
 For each match with relevance > 0.8:
 - Read the existing note
@@ -91,10 +95,12 @@ Ensure no filename collisions. If a file already exists at the target path and d
 
 ### 5. Cross-Reference Wikilinks
 
-Ensure wikilinks between notes are consistent:
-- Session note should be linked from TIL and task notes via `source` property
-- Idea notes should reference the session that inspired them
-- Daily note tasks should wikilink to their standalone task notes
+Phase 1 agents use provisional title-based wikilinks (e.g. `[[Session: Some Title]]`). Replace all wikilinks with the final assigned filenames (without `.md` extension) from Step 4:
+
+- `source` property in TIL, task, and idea notes → `[[{session-note-filename}]]`
+- Idea notes referencing the session → same
+- Idea notes with a canvas diagram → `![[{canvas-filename}]]` embed link
+- Daily note tasks referencing standalone task notes → `[[{task-note-filename}]]`
 
 ### 6. Validate Canvas Files
 
@@ -103,6 +109,7 @@ For any `.canvas` files from idea-writer:
 - Check all node IDs are unique 16-char hex
 - Check all edge references point to existing nodes
 - Assign filename matching the parent idea note
+- Assign to the `canvas` folder from config (e.g. `Claude/Ideas/canvas`)
 
 ## Output Format
 

@@ -90,6 +90,10 @@ type: session-note
 - [[{Wikilink to related concept or note}]]
 ```
 
+## Language
+
+Write all note content in the language specified by `content_language` in config. Templates, frontmatter keys, and section headings remain in English.
+
 ## Guidelines
 
 - Write as if the reader is you, six months from now, trying to remember what happened

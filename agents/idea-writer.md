@@ -87,8 +87,9 @@ category: {architecture|product|workflow|exploration}
 
 ## Related
 
-- [[{Session note that inspired this}]]
+- [[{Session note that inspired this}]]  # provisional — reviewer resolves to final filename
 - [[{Related existing concepts}]]
+- ![[{YYYY-MM-DD}-{idea-name}-diagram.canvas]]  # only if a canvas diagram was generated for this idea
 ---END_IDEA_NOTE---
 ```
 
@@ -98,7 +99,7 @@ When a visual diagram would clarify the idea, produce a JSON Canvas specificatio
 
 ```markdown
 ---IDEA_CANVAS---
-filename: {idea-name}-diagram.canvas
+filename: {YYYY-MM-DD}-{idea-name}-diagram.canvas
 content:
 {Valid JSON Canvas content following the JSON Canvas Spec 1.0}
 ---END_IDEA_CANVAS---
@@ -112,6 +113,10 @@ The canvas JSON must include:
 - Colors: "1" (red), "2" (orange), "3" (yellow), "4" (green), "5" (cyan), "6" (purple)
 
 Separate multiple ideas with `---NEXT_NOTE---`.
+
+## Language
+
+Write all note content in the language specified by `content_language` in config. Templates, frontmatter keys, and section headings remain in English.
 
 ## Guidelines
 

@@ -17,6 +17,14 @@ folders:
   learnings: "Claude/Learnings"
   tasks: "Claude/Tasks"
   ideas: "Claude/Ideas"
+  canvas: "Claude/Ideas/canvas"
+
+# Search mode: "hybrid" uses qmd query (BM25 + vector + LLM re-ranking, requires embeddings),
+# "keyword" uses qmd search only (BM25, no embedding needed — faster and lighter)
+search_mode: "hybrid"
+
+# Language for note content (templates and structure remain unchanged)
+content_language: "English"
 
 # Tags applied to all generated notes
 default_tags:

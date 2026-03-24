@@ -58,7 +58,7 @@ tags:
   - learning
   - {technology or domain tag}
 type: learning
-source: "[[Session: {session description}]]"
+source: "[[Session: {session description}]]"  # provisional — reviewer resolves to final filename
 ---
 
 # {Concise Learning Title}
@@ -88,6 +88,10 @@ source: "[[Session: {session description}]]"
 ```
 
 If there are multiple learnings, separate them with `---NEXT_NOTE---` on its own line.
+
+## Language
+
+Write all note content in the language specified by `content_language` in config. Templates, frontmatter keys, and section headings remain in English.
 
 ## Guidelines
 
