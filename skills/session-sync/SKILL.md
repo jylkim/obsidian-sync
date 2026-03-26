@@ -40,7 +40,9 @@ Step 4: Preview & User Selection
          ↓
 Step 5: Write Notes to Vault
          ↓
-Step 6: Index with qmd
+Step 6: Link to Daily Note
+         ↓
+Step 7: Index with qmd
 ```
 
 ---
@@ -235,9 +237,49 @@ Use the Write tool to create files directly at `${vault_path}/${folder}/${filena
 
 ---
 
-## Step 6: Index with qmd
+## Step 6: Link to Daily Note
 
-After all notes are written:
+Append wikilinks of the written notes to today's Obsidian daily note so they are discoverable from the daily hub.
+
+Collect the filename (without `.md` extension) and frontmatter `title` of each note written in Step 5. Build a wikilink block using `[[filename|title]]` alias syntax, with the session note as the parent and other notes nested under it:
+
+```markdown
+## Claude Session
+- [[{session-filename}|{session title}]]
+	- [[{learning-filename}|{learning title}]]
+	- [[{task-filename}|{task title}]]
+	- [[{idea-filename}|{idea title}]]
+```
+
+If the session produced no sub-notes (TIL, task, idea), the session link still appears as a standalone item. When sync runs multiple times in a day, each session becomes a separate top-level item under the same heading.
+
+Before appending, read the current daily note to check for already-linked filenames and exclude duplicates.
+
+**Primary — `obsidian` CLI** (`obsidian_cli: true`):
+
+```bash
+obsidian daily:read
+```
+
+Check for duplicates, then append:
+
+```bash
+obsidian daily:append content="${wikilink_block}"
+```
+
+**Fallback** (`obsidian_cli: false`):
+
+```bash
+obsidian daily:path
+```
+
+Use the returned path to Read the daily note for duplicate checking, then Edit to append the wikilink block. If `daily:path` also fails, skip this step with a warning — the notes themselves are already saved.
+
+---
+
+## Step 7: Index with qmd
+
+After all notes are written and the daily note is updated:
 
 ```bash
 qmd update --collection "${qmd_collection}"
