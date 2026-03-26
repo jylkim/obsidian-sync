@@ -82,11 +82,11 @@ Searches your vault using qmd's hybrid search and presents relevant notes with e
 ```
 Phase 1: Analysis (Parallel)
 ┌──────────────────┬──────────────────┐
-│  session-drafter   │  til-drafter      │  sonnet
-│  (session report) │  (learnings)     │
+│  session-drafter │  til-drafter     │  sonnet
+│  (session report)│  (learnings)     │
 ├──────────────────┼──────────────────┤
-│  task-drafter      │  idea-drafter     │  sonnet / opus
-│  (follow-ups)     │  (creative ideas)│
+│  task-drafter    │  idea-drafter    │  sonnet / opus
+│  (follow-ups)    │  (creative ideas)│
 └──────────────────┴──────────────────┘
                     │
                     ▼
