@@ -228,6 +228,7 @@ Convert each draft to Obsidian-native format following `references/note-template
 - Add YAML frontmatter (date, tags, type, etc.)
 - Convert plain text cues to Obsidian syntax (callouts, wikilinks, highlights)
 - Add `source` wikilinks between related notes using filenames from the reviewer
+- Populate `## Related` section with wikilinks from the reviewer's **Related** field (vault notes found during duplicate search)
 - Add wikilink embeds for diagram files (`![[{canvas-filename}]]`) in idea notes
 
 For idea drafts that include a `---DIAGRAM---` block:

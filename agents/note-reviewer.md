@@ -68,6 +68,16 @@ For each match with relevance > 0.8:
   - **Append**: Existing note covers the same topic but new content adds value
   - **Create**: Sufficiently unique
 
+#### Collect Related Notes
+
+From the same search results, collect matches with relevance ≥ 0.7 as related note candidates. Use the snippet to judge thematic relevance — include if the topic genuinely connects to the draft, exclude if the keyword match is superficial. Notes already dispositioned as skip or append above are excluded.
+
+For each related note, record:
+- Filename (without extension, for wikilink)
+- Title (H1 heading from the note)
+
+Obsidian's backlinks handle the reverse direction automatically, so only new notes need the link.
+
 If qmd is unavailable, fall through:
 
 **Fallback — `obsidian` CLI** (when `obsidian_cli: true`):
@@ -122,6 +132,7 @@ If a file already exists at the target path, append a numeric suffix.
 ### {filename}
 **Type**: {type}
 **Folder**: {folder path}
+**Related**: [[{related-note-1}|{title-1}]], [[{related-note-2}|{title-2}]]
 
 {Draft content as-is}
 
