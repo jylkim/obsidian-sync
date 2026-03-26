@@ -1,5 +1,5 @@
 # obsidian-sync configuration
-# This template is used by /obsidian-config to generate your config.
+# This template is used by /configure to generate your config.
 # Config is saved to ~/.claude/plugins/obsidian-sync/config.yaml
 
 # Obsidian vault name (used for `obsidian` CLI vault= parameter)

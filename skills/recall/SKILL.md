@@ -80,13 +80,15 @@ Focus on sections most relevant to the query. For long notes, read selectively r
 
 ### Step 5: Synthesize and Present
 
-Present findings with enough context for the user to act on them:
+Present findings differently depending on how the skill was triggered:
+
+**Explicit invocation** (`/recall` or "search my notes"):
 
 ```markdown
 ## Recall: "{query}"
 
 ### 1. [[Note Title]] (score: 0.92)
-**Path**: Claude/Sessions/2026-03-20-api-refactor.md
+**Path**: Claude/Sessions/{YYYY-MM-DD}-api-refactor.md
 **Tags**: #api, #refactoring
 **Relevant excerpt**:
 > [Key paragraph from the note]
@@ -99,7 +101,11 @@ Present findings with enough context for the user to act on them:
 *{N} notes searched in collection "{qmd_collection}"*
 ```
 
-If the user's question can be answered directly from the retrieved notes, provide the answer along with the source references.
+**Proactive invocation** (triggered by context — the user didn't ask to search, but past notes are relevant):
+
+Answer the user's question or continue the conversation directly, weaving in relevant information from the retrieved notes. Cite sources inline as wikilinks (e.g., "Based on [[{note title}]], ..."). Do not use the formatted recall block — the user didn't ask for a search, so the results should feel like helpful context, not a search report.
+
+In both cases, if the retrieved notes directly answer the user's question, provide the answer rather than just listing sources.
 
 ## Fallback Chain
 

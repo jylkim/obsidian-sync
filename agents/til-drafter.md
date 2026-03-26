@@ -2,7 +2,6 @@
 name: til-drafter
 description: |
   Extract learnings, discoveries, and mistakes from a session and compose TIL (Today I Learned) drafts. Each distinct learning becomes its own draft. Used in Phase 1 of the /sync workflow.
-tools: Read, Glob, Grep
 model: sonnet
 ---
 

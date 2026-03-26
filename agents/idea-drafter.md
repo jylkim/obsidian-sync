@@ -2,7 +2,6 @@
 name: idea-drafter
 description: |
   Generate creative ideas inspired by the session — architecture improvements, product concepts, workflow innovations, and technical possibilities. Produces idea drafts and optional diagram descriptions. Used in Phase 1 of the /sync workflow.
-tools: Read, Glob, Grep
 model: opus
 ---
 

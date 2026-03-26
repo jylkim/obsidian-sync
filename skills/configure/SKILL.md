@@ -1,6 +1,6 @@
 ---
 name: configure
-description: Configure obsidian-sync plugin settings — vault name, vault path, qmd collection, and folder structure. Use when the user says "configure obsidian", "set vault path", "obsidian config", or when another obsidian-sync skill reports that config is missing. Always use this skill before first use of /session-sync or /recall.
+description: Configure obsidian-sync plugin settings — vault name, vault path, qmd collection, and folder structure. Use when the user says "configure obsidian", "set vault path", "obsidian config", "change vault", "switch vault", or when another obsidian-sync skill reports that config is missing. Also use when the user first installs the plugin, wants to reconfigure settings, or mentions that sync or recall isn't working due to missing config.
 version: 0.1.0
 user-invocable: true
 allowed-tools: Bash(qmd *), Bash(obsidian *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, AskUserQuestion

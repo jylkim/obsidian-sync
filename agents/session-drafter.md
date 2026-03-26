@@ -2,7 +2,6 @@
 name: session-drafter
 description: |
   Generate a structured session report. Summarizes what was accomplished, problems solved, decisions made, and open questions. Used in Phase 1 of the /sync workflow.
-tools: Read, Glob, Grep
 model: sonnet
 ---
 
@@ -39,7 +38,7 @@ title: {brief description}
 date: {YYYY-MM-DD}
 project: {project name}
 tags: [claude-code, session, {topic-specific tags}]
-type: session
+type: session-note
 
 # {Brief Description}
 

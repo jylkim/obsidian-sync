@@ -2,7 +2,6 @@
 name: task-drafter
 description: |
   Identify incomplete work, follow-up tasks, and action items from a session. Produces standalone task drafts. Used in Phase 1 of the /sync workflow.
-tools: Read, Glob, Grep
 model: sonnet
 ---
 

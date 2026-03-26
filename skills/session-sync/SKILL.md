@@ -3,7 +3,7 @@ name: session-sync
 description: Sync your current Claude Code session to Obsidian as structured notes. Use when the user says "sync to obsidian", "save session", "write notes to vault", "obsidian sync", or wants to capture session knowledge before ending. Runs a multi-agent pipeline that generates session reports, TIL notes, follow-up tasks, and creative ideas, then writes them to the Obsidian vault. Always use this skill when the user wants to persist session work to their knowledge base.
 version: 0.1.0
 user-invocable: true
-allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Edit, Glob, Grep, Agent, AskUserQuestion, Skill(obsidian-markdown), Skill(json-canvas)
+allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Edit, Glob, Grep, Agent, AskUserQuestion
 ---
 
 # Obsidian Session Sync
@@ -53,7 +53,7 @@ Step 7: Index with qmd
 Read: ~/.claude/plugins/obsidian-sync/config.yaml
 ```
 
-Extract: `vault_name`, `vault_path`, `qmd_collection`, `folders`, `default_tags`.
+Extract: `vault_name`, `vault_path`, `qmd_collection`, `folders`, `default_tags`, `content_language`.
 
 If config is missing:
 ```
@@ -83,6 +83,7 @@ Session Context:
 - Key decisions: {extracted from conversation}
 - Problems solved: {extracted from conversation}
 - Tools/technologies used: {notable APIs, libraries, frameworks}
+- Content language: {from config content_language}
 ```
 
 Keep the summary concise — focus on what matters, not exhaustive detail. Cap at roughly 500 words to avoid overwhelming Phase 1 agents.
@@ -222,16 +223,16 @@ Convert selected drafts into Obsidian-formatted notes and write to the vault.
 
 ### 5a. Format Drafts → Obsidian Notes
 
-Use the **obsidian-markdown** skill to convert each draft:
+Convert each draft to Obsidian-native format following `references/note-templates.md`:
 
 - Add YAML frontmatter (title, date, tags, type, etc.)
 - Convert plain text cues to Obsidian syntax (callouts, wikilinks, highlights)
 - Add `source` wikilinks between related notes using filenames from the reviewer
 - Add wikilink embeds for diagram files (`![[{canvas-filename}]]`) in idea notes
 
-For idea drafts that include a `---DIAGRAM---` block, use the **json-canvas** skill to:
+For idea drafts that include a `---DIAGRAM---` block:
 
-- Convert the diagram description into a valid JSON Canvas file
+- Convert the diagram description into a valid [JSON Canvas](https://jsoncanvas.org/) file (`.canvas`)
 - Assign to the `canvas` folder from config
 
 ### 5b. Write to Vault
