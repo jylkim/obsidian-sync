@@ -1,6 +1,6 @@
 ---
-name: obsidian-config
-description: Configure obsidian-sync plugin settings — vault name, vault path, qmd collection, and folder structure. Use when the user says "configure obsidian", "set vault path", "obsidian config", or when another obsidian-sync skill reports that config is missing. Always use this skill before first use of /obsidian-sync or /obsidian-recall.
+name: config
+description: Configure obsidian-sync plugin settings — vault name, vault path, qmd collection, and folder structure. Use when the user says "configure obsidian", "set vault path", "obsidian config", or when another obsidian-sync skill reports that config is missing. Always use this skill before first use of /session-sync or /recall.
 version: 0.1.0
 user-invocable: true
 allowed-tools: Bash(qmd *), Bash(obsidian *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, AskUserQuestion
@@ -70,7 +70,7 @@ AskUserQuestion:
   → vault_path
 ```
 
-Warn the user that `obsidian` CLI is not available — direct file write will be used as fallback for /obsidian-sync.
+Warn the user that `obsidian` CLI is not available — direct file write will be used as fallback for /session-sync.
 
 ### Step 4: Remaining Settings
 
@@ -165,5 +165,5 @@ Configuration saved to ~/.claude/plugins/obsidian-sync/config.yaml
   Write mode: `obsidian` CLI | direct file write
   Folders:    Claude/Sessions, Claude/Learnings, Claude/Tasks, Claude/Ideas
 
-Ready to use /obsidian-sync and /obsidian-recall.
+Ready to use /session-sync and /recall.
 ```

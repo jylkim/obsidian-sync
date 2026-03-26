@@ -8,7 +8,7 @@ A Claude Code plugin that bridges your coding sessions with your Obsidian vault.
 - **2-Phase Architecture**: Parallel analysis followed by sequential validation
 - **Session Reports**: Structured notes capturing what you accomplished, decided, and solved
 - **TIL Notes**: Automatically extracted learnings with code examples
-- **Task Tracking**: Follow-up tasks synced to daily notes and standalone task notes
+- **Task Tracking**: Follow-up tasks as standalone task notes with priorities
 - **Creative Ideas**: Architecture improvements, product concepts, and visual diagrams
 - **Semantic Recall**: Search past notes with qmd's hybrid retrieval (BM25 + vector + LLM re-ranking)
 - **Obsidian-Native**: Wikilinks, callouts, frontmatter, tags, and .canvas files
@@ -45,7 +45,7 @@ claude --plugin-dir /path/to/obsidian-sync
 ## Setup
 
 ```
-/obsidian-config
+/config
 ```
 
 This will prompt you for:
@@ -58,7 +58,7 @@ This will prompt you for:
 ### Sync Session to Obsidian
 
 ```
-/obsidian-sync
+/session-sync
 ```
 
 Runs the full sync workflow:
@@ -72,7 +72,7 @@ Runs the full sync workflow:
 ### Recall Past Knowledge
 
 ```
-/obsidian-recall what was that retry pattern we used?
+/recall what was that retry pattern we used?
 ```
 
 Searches your vault using qmd's hybrid search and presents relevant notes with excerpts.
@@ -120,13 +120,13 @@ Phase 2: Validation (Sequential)
 
 | Skill | Command | Purpose |
 |-------|---------|---------|
-| obsidian-sync | `/obsidian-sync` | Full session sync workflow |
-| obsidian-recall | `/obsidian-recall` | Semantic vault search |
-| obsidian-config | `/obsidian-config` | Plugin configuration |
+| session-sync | `/session-sync` | Full session sync workflow |
+| recall | `/recall` | Semantic vault search |
+| config | `/config` | Plugin configuration |
 
 ## Vault Structure
 
-Default folder layout (customizable via `/obsidian-config`):
+Default folder layout (customizable via `/config`):
 
 ```
 Your Vault/
@@ -140,13 +140,13 @@ Your Vault/
 
 ## When to Use
 
-**Use `/obsidian-sync` when:**
+**Use `/session-sync` when:**
 - Ending a productive work session
 - After completing a feature or fixing a significant bug
 - Before switching to a different project
 - When you want to capture knowledge for future reference
 
-**Use `/obsidian-recall` when:**
+**Use `/recall` when:**
 - Starting a new session and need context from past work
 - Trying to remember how you solved a similar problem
 - Looking for past decisions or architectural notes

@@ -1,5 +1,5 @@
 ---
-name: obsidian-recall
+name: recall
 description: Search and retrieve knowledge from the user's Obsidian vault using qmd semantic search. Use proactively whenever past notes, decisions, or context could be relevant — not just on explicit search requests. Triggers include "recall", "search my notes", "what did I write about", "find in vault", "didn't I…", "wasn't there…", referencing prior work, trying to remember something, or starting a task where historical context would reduce rework. When in doubt, search.
 version: 0.1.0
 user-invocable: true
@@ -13,7 +13,7 @@ Search your Obsidian vault for past knowledge using qmd. All search runs locally
 ## Prerequisites
 
 - **qmd** installed (`npm install -g @tobilu/qmd`)
-- Config exists at `~/.claude/plugins/obsidian-sync/config.yaml` (run `/obsidian-config` if missing)
+- Config exists at `~/.claude/plugins/obsidian-sync/config.yaml` (run `/config` if missing)
 
 ## Workflow
 
@@ -27,12 +27,12 @@ Extract `vault_name`, `vault_path`, `qmd_collection`, `search_mode`.
 
 If config is missing, tell the user:
 ```
-Config not found. Run /obsidian-config to set up your vault.
+Config not found. Run /config to set up your vault.
 ```
 
 ### Step 2: Parse Query
 
-Extract the search intent from the user's message. If the user provided a `/obsidian-recall` argument, use it directly. Otherwise, distill based on `search_mode`:
+Extract the search intent from the user's message. If the user provided a `/recall` argument, use it directly. Otherwise, distill based on `search_mode`:
 
 - **hybrid**: keep natural phrasing — semantic search benefits from intent and context. e.g. "how did we implement the retry pattern back then" → `"retry pattern implementation"`
 - **keyword**: extract 2–3 core keywords only — BM25 scores drop with filler words. e.g. "how did we implement the retry pattern back then" → `"retry pattern implement"`
@@ -129,7 +129,7 @@ Grep: "${query}" in ${vault_path}/ --type md
 | Situation | Response |
 |-----------|----------|
 | qmd not installed | `qmd CLI required. Install: npm install -g @tobilu/qmd` |
-| Collection not found | `Collection "${qmd_collection}" not registered. Run /obsidian-config.` |
+| Collection not found | `Collection "${qmd_collection}" not registered. Run /config.` |
 | Embeddings not built | `Run: qmd embed --collection "${qmd_collection}"` (keyword search still works) |
 | No results | Suggest broader terms, try keyword-only search, or offer to browse vault folders |
 

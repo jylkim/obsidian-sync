@@ -1,7 +1,7 @@
 ---
 name: task-drafter
 description: |
-  Identify incomplete work, follow-up tasks, and action items from a session. Produces task items for daily notes and standalone task drafts for complex items. Used in Phase 1 of the /sync workflow.
+  Identify incomplete work, follow-up tasks, and action items from a session. Produces standalone task drafts. Used in Phase 1 of the /sync workflow.
 tools: Read, Glob, Grep
 model: sonnet
 ---
@@ -40,26 +40,9 @@ Assign each task a priority:
 
 ### 3. Format Output
 
-Produce two types of content:
-
-**A) Daily Note Tasks** — concise checklist items
-**B) Task Drafts** — detailed standalone drafts for complex tasks
+Produce standalone task drafts for each actionable item.
 
 ## Output Format
-
-### Daily Note Content
-
-```markdown
----DAILY_NOTE---
-## Follow-ups from {project name}
-
-- [ ] P0: {urgent task description}
-- [ ] P1: {important task}
-- [ ] P2: {medium priority task}
----END_DAILY_NOTE---
-```
-
-### Standalone Task Drafts
 
 ```markdown
 ---DRAFT---
@@ -106,7 +89,6 @@ Write all content in the language specified by `content_language` in config. Met
 - Every task should have a clear "next action" — vague tasks don't get done
 - Include enough context that someone can pick up the task without re-reading the entire session
 - File paths and function names make tasks actionable; vague descriptions don't
-- Daily note tasks should be one line each — if it needs more detail, make it a standalone draft
 - Prefer fewer, well-scoped tasks over many granular ones
 
 ## Edge Cases

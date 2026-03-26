@@ -40,7 +40,7 @@ Templates for each note type produced by the /sync workflow. Agents reference th
 - `#claude-code` — on every generated note
 - `#session`, `#learning`, `#task`, `#idea` — type tags
 - `#{technology}` — e.g., `#python`, `#react`, `#sqlite`
-- `#P0` through `#P3` — priority tags on tasks in daily notes
+- `#P0` through `#P3` — priority tags on tasks
 
 ## Session Note Template
 
@@ -206,12 +206,3 @@ canvas: "[[{canvas-filename}]]"
 - [[{wikilink}]]
 ```
 
-## Daily Note Task Format
-
-```markdown
-## Follow-ups from {project name}
-
-- [ ] #P0 {description} [[{related note}]]
-- [ ] #P1 {description}
-- [ ] #P2 {description}
-```

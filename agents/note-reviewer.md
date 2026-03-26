@@ -19,7 +19,6 @@ Phase 1 results are passed as:
 {Drafts separated by ---NEXT_NOTE---}
 
 ## task-drafter output:
-{Daily note content between ---DAILY_NOTE--- markers}
 {Task drafts between ---DRAFT--- markers}
 
 ## idea-drafter output:
@@ -46,26 +45,7 @@ Extract each draft from the Phase 1 output. Track:
 - Title
 - Content
 
-### 2. Deduplicate Daily Note Tasks
-
-Daily note tasks are scoped to a single file — no vault-wide search needed.
-
-**Primary (obsidian CLI)**:
-```bash
-obsidian vault="${vault_name}" tasks daily todo
-```
-
-**Fallback (direct file access)**:
-```
-Glob: ${vault_path}/**/$(date +%Y-%m-%d)*.md
-```
-Then Read the match and extract `- [ ]` and `- [x]` lines.
-
-For each new follow-up task, check if a substantially similar item already exists (match on the description text, ignoring priority tags and wikilinks). Only keep tasks not already present.
-
-If today's daily note doesn't exist yet, skip dedup — all tasks are new.
-
-### 3. Check for Duplicates (Standalone Drafts)
+### 2. Check for Duplicates
 
 For each learning, task, and idea draft, choose the search command based on note type:
 
@@ -94,7 +74,7 @@ Glob: ${vault_path}/${folder}/*{date}*.md
 Grep: "{key phrase}" in matching files
 ```
 
-### 4. Assign Filenames
+### 3. Assign Filenames
 
 For each draft:
 - **Folder**: Based on type and config folders mapping (diagrams go to `canvas` folder)
@@ -125,7 +105,6 @@ If a file already exists at the target path, append a numeric suffix.
 | Learning | {n} | {n} | {n} | {n} |
 | Task | {n} | {n} | {n} | {n} |
 | Idea | {n} | {n} | {n} | {n} |
-| Daily Note | {1 or 0} | — | {1 or 0} | {n} skipped |
 
 ---
 
@@ -145,12 +124,6 @@ If a file already exists at the target path, append a numeric suffix.
 **Existing path**: {full path}
 **Append content**:
 {Content to append}
-
----
-
-## Daily Note Content
-
-{Deduplicated daily note tasks — duplicates removed, new tasks only}
 
 ---
 

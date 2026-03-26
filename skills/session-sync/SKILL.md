@@ -1,18 +1,18 @@
 ---
-name: obsidian-sync
+name: session-sync
 description: Sync your current Claude Code session to Obsidian as structured notes. Use when the user says "sync to obsidian", "save session", "write notes to vault", "obsidian sync", or wants to capture session knowledge before ending. Runs a multi-agent pipeline that generates session reports, TIL notes, follow-up tasks, and creative ideas, then writes them to the Obsidian vault. Always use this skill when the user wants to persist session work to their knowledge base.
 version: 0.1.0
 user-invocable: true
 allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Edit, Glob, Grep, Agent, AskUserQuestion, Skill(obsidian-markdown), Skill(json-canvas)
 ---
 
-# Obsidian Sync
+# Obsidian Session Sync
 
 2-phase multi-agent workflow that analyzes the current session and writes structured notes to an Obsidian vault.
 
 ## Prerequisites
 
-- Config exists at `~/.claude/plugins/obsidian-sync/config.yaml` (run `/obsidian-config` if missing)
+- Config exists at `~/.claude/plugins/obsidian-sync/config.yaml` (run `/config` if missing)
 - qmd installed for indexing (`npm install -g @tobilu/qmd`)
 - Obsidian app running (for `obsidian` CLI; direct file write works without it)
 
@@ -55,7 +55,7 @@ Extract: `vault_name`, `vault_path`, `qmd_collection`, `folders`, `default_tags`
 
 If config is missing:
 ```
-Config not found. Run /obsidian-config to set up your vault first.
+Config not found. Run /config to set up your vault first.
 ```
 
 ---
@@ -131,7 +131,7 @@ Agent(
 |-------|-------|---------|--------|
 | session-drafter | sonnet | Session report | 1 session note |
 | til-drafter | sonnet | Learnings | 0–N TIL notes |
-| task-drafter | sonnet | Follow-up tasks | Daily note tasks + 0–N task notes |
+| task-drafter | sonnet | Follow-up tasks | 0–N task notes |
 | idea-drafter | opus | Creative ideas | 0–N idea notes + optional .canvas |
 
 Agents that find nothing to write return "No {type} notes for this session."
@@ -215,7 +215,6 @@ Use the `obsidian_cli` flag from Step 1 to choose the write method.
 
 ```bash
 obsidian vault="${vault_name}" create name="${note_name}" content="${content}" silent
-obsidian vault="${vault_name}" daily:append content="${daily_tasks}"
 obsidian vault="${vault_name}" property:set name="tags" value="${tags}" file="${note_name}"
 ```
 
@@ -225,7 +224,7 @@ obsidian vault="${vault_name}" property:set name="tags" value="${tags}" file="${
 mkdir -p "${vault_path}/${folder}"
 ```
 
-Use the Write tool to create files directly at `${vault_path}/${folder}/${filename}`. Include frontmatter in the file content since property:set is unavailable. Daily note append is skipped in fallback mode.
+Use the Write tool to create files directly at `${vault_path}/${folder}/${filename}`. Include frontmatter in the file content since property:set is unavailable.
 
 ### Write Order
 
@@ -233,7 +232,6 @@ Use the Write tool to create files directly at `${vault_path}/${folder}/${filena
 2. TIL notes
 3. Task notes
 4. Idea notes + canvas files
-5. Daily note append (last, references all created notes)
 
 ---
 
@@ -282,7 +280,7 @@ If a Phase 1 agent fails or returns an error:
 
 ### Arguments
 
-- `/obsidian-sync` — full interactive workflow
+- `/session-sync` — full interactive workflow
 - No quick mode — always runs the full pipeline for quality
 
 ---
