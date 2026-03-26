@@ -178,16 +178,41 @@ The note-reviewer:
 
 ---
 
-## Step 4: Preview & Selection
+## Step 4: Preview & Approval
 
-Use AskUserQuestion to let the user choose which notes to sync. Requirements:
+Present each note as its own AskUserQuestion tab so the user can preview the content and approve or reject individually. Session notes are always approved — exclude them from review.
 
-- **Session notes are always approved** — do not ask the user about them. Proceed directly to write.
-- **One question per type**: Learnings, Tasks, Ideas each get their own separate multi-select question. Never combine multiple types into a single question.
-- **Skip empty types**: only ask about types that have content
-- **Individual selection**: each note is its own option, labeled by title
-- **Content preview**: include the target path and a 2–3 line content excerpt in each option's description so the user can judge without reading the full note
-- If the user provides custom input, display the full note content and allow edits before proceeding
+### Batching
+
+- Group notes into batches of **up to 4** per AskUserQuestion call (tool limit: max 4 questions)
+- If there are more than 4 notes, call AskUserQuestion multiple times
+- If there are no notes to review (all session or no Phase 1 output), skip this step
+
+### Tab Structure
+
+Each note becomes one question (tab):
+
+| Field | Value |
+|-------|-------|
+| **header** | Note type — `Learning`, `Task`, `Idea` (max 12 chars) |
+| **question** | Note title |
+| **multiSelect** | `false` |
+| **options** | See below |
+
+Options (2):
+
+1. **"Save"** — include the draft body as markdown in the `preview` field. When the user focuses this option, the content renders on the right side.
+2. **"Skip"** — description: "Do not save this note"
+
+### Preview Content
+
+Use the Phase 1 draft body as-is for the `preview` markdown. Do not include file paths or metadata — the user needs to judge the content, not the destination.
+
+### Handling Responses
+
+- "Save" → include the note in Step 5
+- "Skip" → exclude the note
+- Custom input → treat as an edit request. Display the full note content and allow modifications before proceeding
 
 ---
 
