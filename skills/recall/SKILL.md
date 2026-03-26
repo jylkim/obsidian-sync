@@ -13,7 +13,7 @@ Search your Obsidian vault for past knowledge using qmd. All search runs locally
 ## Prerequisites
 
 - **qmd** installed (`npm install -g @tobilu/qmd`)
-- Config exists at `~/.claude/plugins/obsidian-sync/config.yaml` (run `/config` if missing)
+- Config exists at `~/.claude/plugins/obsidian-sync/config.yaml` (run `/configure` if missing)
 
 ## Workflow
 
@@ -27,7 +27,7 @@ Extract `vault_name`, `vault_path`, `qmd_collection`, `search_mode`.
 
 If config is missing, tell the user:
 ```
-Config not found. Run /config to set up your vault.
+Config not found. Run /configure to set up your vault.
 ```
 
 ### Step 2: Parse Query
@@ -129,7 +129,7 @@ Grep: "${query}" in ${vault_path}/ --type md
 | Situation | Response |
 |-----------|----------|
 | qmd not installed | `qmd CLI required. Install: npm install -g @tobilu/qmd` |
-| Collection not found | `Collection "${qmd_collection}" not registered. Run /config.` |
+| Collection not found | `Collection "${qmd_collection}" not registered. Run /configure.` |
 | Embeddings not built | `Run: qmd embed --collection "${qmd_collection}"` (keyword search still works) |
 | No results | Suggest broader terms, try keyword-only search, or offer to browse vault folders |
 

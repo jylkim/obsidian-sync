@@ -12,7 +12,7 @@ allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(m
 
 ## Prerequisites
 
-- Config exists at `~/.claude/plugins/obsidian-sync/config.yaml` (run `/config` if missing)
+- Config exists at `~/.claude/plugins/obsidian-sync/config.yaml` (run `/configure` if missing)
 - qmd installed for indexing (`npm install -g @tobilu/qmd`)
 - Obsidian app running (for `obsidian` CLI; direct file write works without it)
 
@@ -55,7 +55,7 @@ Extract: `vault_name`, `vault_path`, `qmd_collection`, `folders`, `default_tags`
 
 If config is missing:
 ```
-Config not found. Run /config to set up your vault first.
+Config not found. Run /configure to set up your vault first.
 ```
 
 ---

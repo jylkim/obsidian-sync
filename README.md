@@ -45,7 +45,7 @@ claude --plugin-dir /path/to/obsidian-sync
 ## Setup
 
 ```
-/config
+/configure
 ```
 
 This will prompt you for:
@@ -122,11 +122,11 @@ Phase 2: Validation (Sequential)
 |-------|---------|---------|
 | session-sync | `/session-sync` | Full session sync workflow |
 | recall | `/recall` | Semantic vault search |
-| config | `/config` | Plugin configuration |
+| configure | `/configure` | Plugin configuration |
 
 ## Vault Structure
 
-Default folder layout (customizable via `/config`):
+Default folder layout (customizable via `/configure`):
 
 ```
 Your Vault/
