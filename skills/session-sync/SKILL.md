@@ -142,7 +142,7 @@ Agents that find nothing to write return "No {type} notes for this session."
 
 ## Step 3: Phase 2 — Validation
 
-After all Phase 1 agents complete, pass til, task, and idea output to the reviewer. Session-drafter output bypasses review — it is always created with filename `{YYYY-MM-DD}-session.md` in the sessions folder.
+After all Phase 1 agents complete, pass til, task, and idea output to the reviewer. Session-drafter output bypasses review — it is created with filename `{YYYY-MM-DD}-session.md` in the sessions folder. If a file with that name already exists (same-day re-sync), append a numeric suffix (`-1`, `-2`, …) to avoid overwriting.
 
 ```
 Agent(
@@ -227,6 +227,22 @@ mkdir -p "${vault_path}/${folder}"
 ```
 
 Use the Write tool to create files directly at `${vault_path}/${folder}/${filename}`. Include frontmatter in the file content since property:set is unavailable.
+
+### Session Filename Collision Check
+
+Before writing the session note, check if the target file already exists:
+
+**Primary** (`obsidian_cli: true`):
+```bash
+obsidian vault="${vault_name}" files folder="${sessions_folder}"
+```
+
+**Fallback** (`obsidian_cli: false`):
+```
+Glob: ${vault_path}/${sessions_folder}/${YYYY-MM-DD}-session*.md
+```
+
+If `{YYYY-MM-DD}-session.md` exists, use `{YYYY-MM-DD}-session-1.md` (increment until no collision).
 
 ### Write Order
 
