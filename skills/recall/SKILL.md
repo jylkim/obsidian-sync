@@ -109,32 +109,41 @@ In both cases, if the retrieved notes directly answer the user's question, provi
 
 ## Fallback Chain
 
-If the primary search method fails, fall back gracefully:
+qmd is the expected primary tool. If it is unavailable, fall through automatically — do not stop to ask the user to install it.
 
-| Method | When |
-|--------|------|
-| `qmd query` (hybrid) | `search_mode: hybrid` |
-| `qmd search` (keyword) | `search_mode: keyword`, or hybrid returns few results |
-| `obsidian search` | qmd fails entirely |
-| `Grep` in vault_path | Neither qmd nor `obsidian` CLI available |
+### Levels
 
-### `obsidian` CLI fallback
+Run qmd directly — if the command fails (not installed or error), fall to the next level.
+
+| Level | Method | Trigger |
+|-------|--------|---------|
+| 1 | `qmd query` / `qmd search` | Primary — always try first |
+| 2 | `obsidian search` | qmd not installed or command fails |
+| 3 | `Grep` | Neither qmd nor Obsidian CLI available |
+
+### Level 2: `obsidian` CLI
 
 ```bash
 obsidian vault="${vault_name}" search query="${query}" limit=10
 ```
 
-### Grep fallback (last resort)
+Results are plain text — no relevance scores. Present all matches and let the user judge relevance.
 
-```bash
+### Level 3: Grep (last resort)
+
+```
 Grep: "${query}" in ${vault_path}/ --type md
 ```
+
+Returns raw line matches. Best for exact keyword lookups; ineffective for semantic queries.
+
+After a successful fallback search, continue to Step 4 (Read Top Results) as normal.
 
 ## Error Handling
 
 | Situation | Response |
 |-----------|----------|
-| qmd not installed | `qmd CLI required. Install: npm install -g @tobilu/qmd` |
+| qmd not installed | Fall through to Level 2/3 (see Fallback Chain). Mention once: `qmd not found — using fallback search.` |
 | Collection not found | `Collection "${qmd_collection}" not registered. Run /configure.` |
 | Embeddings not built | `Run: qmd embed --collection "${qmd_collection}"` (keyword search still works) |
 | No results | Suggest broader terms, try keyword-only search, or offer to browse vault folders |

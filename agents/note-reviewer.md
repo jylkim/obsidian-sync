@@ -68,11 +68,20 @@ For each match with relevance > 0.8:
   - **Append**: Existing note covers the same topic but new content adds value
   - **Create**: Sufficiently unique
 
-If qmd is unavailable, use Glob + Grep as fallback:
+If qmd is unavailable, fall through:
+
+**Fallback — `obsidian` CLI** (when `obsidian_cli: true`):
+```bash
+obsidian vault="${vault_name}" search query="{keywords}" limit=5
+```
+
+**Fallback — Glob + Grep** (last resort, when neither qmd nor obsidian CLI is available):
 ```
 Glob: ${vault_path}/${folder}/*{date}*.md
 Grep: "{key phrase}" in matching files
 ```
+
+Fallback results lack relevance scores — compare content manually and err toward "create" when uncertain.
 
 ### 3. Assign Filenames
 
