@@ -40,9 +40,18 @@ Choose the search method based on `search_mode` in config:
 
 #### If `search_mode: hybrid`
 
+Start with the simplest form — short keywords, single collection, no advanced options:
+
 ```bash
-qmd query "${query}" --collection "${qmd_collection}" --json -n 10
+qmd query "${query}" --collection "${qmd_collection}" --json -n 5
 ```
+
+**Do not use** `intent`, `candidate-limit`, structured query, or `--explain` on the first attempt.
+
+If top results are mostly irrelevant, escalate in order:
+1. Rewrite the query shorter and more direct
+2. Use exact phrase matching if needed
+3. Only then try `intent` or structured query
 
 If hybrid returns fewer than 3 results, supplement with keyword search:
 

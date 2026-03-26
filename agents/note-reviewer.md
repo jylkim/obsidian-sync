@@ -52,6 +52,7 @@ Extract each draft from the Phase 1 output. Track:
 For each draft, choose the command based on `search_mode`:
 
 - `hybrid`: `qmd query "{title}" --collection "${qmd_collection}" --json -n 5`
+  Keep queries short (key words from title). Do not use `intent`, `candidate-limit`, structured query, or `--explain`. If top results are irrelevant, rewrite the query shorter before trying advanced options.
 - `keyword`: `qmd search "{title}" --collection "${qmd_collection}" --json -n 5`
 
 Wait for the result before querying the next draft.

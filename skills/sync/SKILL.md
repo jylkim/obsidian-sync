@@ -173,7 +173,7 @@ The note-reviewer:
 
 Use AskUserQuestion to let the user choose which notes to sync. Requirements:
 
-- **Group by type**: one multi-select question per type (Session, Learnings, Tasks, Ideas)
+- **One question per type**: Session, Learnings, Tasks, Ideas each get their own separate multi-select question. Never combine multiple types into a single question.
 - **Skip empty types**: only ask about types that have content
 - **Individual selection**: each note is its own option, labeled by title
 - **Content preview**: include the target path and a 2–3 line content excerpt in each option's description so the user can judge without reading the full note
