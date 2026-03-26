@@ -85,6 +85,14 @@ Session Context:
 
 Keep the summary concise — focus on what matters, not exhaustive detail. Cap at roughly 500 words to avoid overwhelming Phase 1 agents.
 
+Also detect Obsidian CLI availability (used by Phase 2 reviewer and Step 5 write):
+
+```bash
+pgrep -xi obsidian >/dev/null 2>&1 && obsidian vaults 2>/dev/null
+```
+
+Store the result as `obsidian_cli: true/false` for later steps.
+
 ---
 
 ## Step 2: Phase 1 — Parallel Analysis
@@ -132,7 +140,7 @@ Agents that find nothing to write return "No {type} notes for this session."
 
 ## Step 3: Phase 2 — Validation
 
-After all Phase 1 agents complete, pass their combined output to the reviewer:
+After all Phase 1 agents complete, pass til, task, and idea output to the reviewer. Session-drafter output bypasses review — it is always created with filename `{YYYY-MM-DD}-session.md` in the sessions folder.
 
 ```
 Agent(
@@ -140,9 +148,6 @@ Agent(
     description="Check duplicates and assign filenames",
     prompt="""
 Check drafts for duplicates and assign filenames.
-
-## session-drafter output:
-{session-drafter results}
 
 ## til-drafter output:
 {til-drafter results}
@@ -155,8 +160,10 @@ Check drafts for duplicates and assign filenames.
 
 ## Config:
 vault_path: {vault_path}
+vault_name: {vault_name}
 qmd_collection: {qmd_collection}
 search_mode: {search_mode}
+obsidian_cli: {true/false from Step 5b detection}
 folders: {folders}
 """
 )
@@ -173,7 +180,8 @@ The note-reviewer:
 
 Use AskUserQuestion to let the user choose which notes to sync. Requirements:
 
-- **One question per type**: Session, Learnings, Tasks, Ideas each get their own separate multi-select question. Never combine multiple types into a single question.
+- **Session notes are always approved** — do not ask the user about them. Proceed directly to write.
+- **One question per type**: Learnings, Tasks, Ideas each get their own separate multi-select question. Never combine multiple types into a single question.
 - **Skip empty types**: only ask about types that have content
 - **Individual selection**: each note is its own option, labeled by title
 - **Content preview**: include the target path and a 2–3 line content excerpt in each option's description so the user can judge without reading the full note
@@ -199,18 +207,9 @@ For idea drafts that include a `---DIAGRAM---` block, use the **json-canvas** sk
 - Convert the diagram description into a valid JSON Canvas file
 - Assign to the `canvas` folder from config
 
-### 5b. Detect Write Method
+### 5b. Write to Vault
 
-Check if Obsidian is running (CLI requires the app to be open):
-
-```bash
-pgrep -xi obsidian >/dev/null 2>&1 && obsidian vaults 2>/dev/null
-```
-
-- If both succeed: use `obsidian` CLI for write operations
-- Otherwise: use direct file write as fallback
-
-### 5c. Write to Vault
+Use the `obsidian_cli` flag from Step 1 to choose the write method.
 
 **Primary — `obsidian` CLI**:
 

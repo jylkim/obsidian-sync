@@ -32,7 +32,10 @@ Config not found. Run /obsidian-config to set up your vault.
 
 ### Step 2: Parse Query
 
-Extract the search intent from the user's message. If the user provided a `/obsidian-recall` argument, use it directly. Otherwise, distill their question into a concise search query.
+Extract the search intent from the user's message. If the user provided a `/obsidian-recall` argument, use it directly. Otherwise, distill based on `search_mode`:
+
+- **hybrid**: keep natural phrasing — semantic search benefits from intent and context. e.g. "how did we implement the retry pattern back then" → `"retry pattern implementation"`
+- **keyword**: extract 2–3 core keywords only — BM25 scores drop with filler words. e.g. "how did we implement the retry pattern back then" → `"retry pattern implement"`
 
 ### Step 3: Search
 
@@ -53,16 +56,16 @@ If top results are mostly irrelevant, escalate in order:
 2. Use exact phrase matching if needed
 3. Only then try `intent` or structured query
 
-If hybrid returns fewer than 3 results, supplement with keyword search:
+If hybrid returns fewer than 3 results, supplement with keyword search (extract keywords from the original query per the keyword rule in Step 2):
 
 ```bash
-qmd search "${query}" --collection "${qmd_collection}" --json -n 10
+qmd search "${keywords}" --collection "${qmd_collection}" --json -n 10
 ```
 
 #### If `search_mode: keyword`
 
 ```bash
-qmd search "${query}" --collection "${qmd_collection}" --json -n 10
+qmd search "${keywords}" --collection "${qmd_collection}" --json -n 10
 ```
 
 ### Step 4: Read Top Results
@@ -132,6 +135,7 @@ Grep: "${query}" in ${vault_path}/ --type md
 
 ## Tips
 
-- Use natural language queries for best semantic results: "that retry pattern we discovered" works better than "retry"
+- **hybrid**: natural language queries work well — "that retry pattern we discovered" works better than "retry"
+- **keyword**: concise keywords work best — strip filler and keep content words only
 - For exact matches, quote terms: `"ConnectionPool timeout"`
 - Results include a relevance score (0–1); scores above 0.7 are typically strong matches
