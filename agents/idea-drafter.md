@@ -54,6 +54,7 @@ The Write step will convert this into a `.canvas` file using the json-canvas ski
 ---DRAFT---
 title: {compelling title}
 date: {YYYY-MM-DD}
+project: {project name}
 tags: [claude-code, idea, {category tag}]
 type: idea
 category: {architecture|product|workflow|exploration}

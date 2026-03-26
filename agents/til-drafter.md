@@ -52,6 +52,7 @@ For each learning, produce:
 ---DRAFT---
 title: {Concise learning title}
 date: {YYYY-MM-DD}
+project: {project name}
 tags: [claude-code, learning, {technology or domain tag}]
 type: learning
 

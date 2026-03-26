@@ -6,11 +6,10 @@ Templates for each note type produced by the /sync workflow. Agents reference th
 
 | Field | Type | Required | Notes |
 |-------|------|----------|-------|
-| title | string | Yes | Descriptive title |
 | date | date | Yes | YYYY-MM-DD format |
 | tags | list | Yes | Always includes `claude-code` |
 | type | string | Yes | `session-note`, `learning`, `task`, or `idea` |
-| project | string | Session only | Working directory name |
+| project | string | Yes | Working directory name |
 | source | wikilink | TIL only | Links to session note |
 | priority | string | Task only | P0, P1, P2, P3 |
 | status | string | Task only | open, in-progress, done |
@@ -46,7 +45,6 @@ Templates for each note type produced by the /sync workflow. Agents reference th
 
 ```markdown
 ---
-title: "Session: {brief description}"
 date: {YYYY-MM-DD}
 project: {project name}
 tags:
@@ -90,8 +88,8 @@ type: session-note
 
 ```markdown
 ---
-title: "{Concise learning title}"
 date: {YYYY-MM-DD}
+project: {project name}
 tags:
   - claude-code
   - learning
@@ -130,8 +128,8 @@ source: "[[Session: {description}]]"
 
 ```markdown
 ---
-title: "Task: {descriptive title}"
 date: {YYYY-MM-DD}
+project: {project name}
 tags:
   - claude-code
   - task
@@ -169,8 +167,8 @@ status: open
 
 ```markdown
 ---
-title: "Idea: {compelling title}"
 date: {YYYY-MM-DD}
+project: {project name}
 tags:
   - claude-code
   - idea

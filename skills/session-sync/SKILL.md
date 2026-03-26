@@ -25,9 +25,9 @@ Step 1: Gather Session Context
          ↓
 Step 2: Phase 1 — 4 Agents in Parallel
   ┌──────────────────┬──────────────────┐
-  │  session-drafter   │  til-drafter      │  (sonnet)
+  │  session-drafter │  til-drafter     │  (sonnet)
   ├──────────────────┼──────────────────┤
-  │  task-drafter      │  idea-drafter     │  (sonnet / opus)
+  │  task-drafter    │  idea-drafter    │  (sonnet / opus)
   └──────────────────┴──────────────────┘
          ↓ (collect all results)
 Step 3: Phase 2 — note-reviewer Sequential
@@ -143,7 +143,7 @@ Agents that find nothing to write return "No {type} notes for this session."
 
 ## Step 3: Phase 2 — Validation
 
-After all Phase 1 agents complete, pass til, task, and idea output to the reviewer. Session-drafter output bypasses review — it is created with filename `{YYYY-MM-DD}-session.md` in the sessions folder. If a file with that name already exists (same-day re-sync), append a numeric suffix (`-1`, `-2`, …) to avoid overwriting.
+After all Phase 1 agents complete, pass til, task, and idea output to the reviewer. Session-drafter output bypasses review — it is created with filename `{YYYY-MM-DD}-{slug}.md` in the sessions folder, where `{slug}` is derived from the drafter's `title` (lowercase, hyphens, max 50 chars). If a file with that name already exists, append a numeric suffix (`-1`, `-2`, …) to avoid overwriting.
 
 ```
 Agent(
@@ -225,7 +225,7 @@ Convert selected drafts into Obsidian-formatted notes and write to the vault.
 
 Convert each draft to Obsidian-native format following `references/note-templates.md`:
 
-- Add YAML frontmatter (title, date, tags, type, etc.)
+- Add YAML frontmatter (date, tags, type, etc.)
 - Convert plain text cues to Obsidian syntax (callouts, wikilinks, highlights)
 - Add `source` wikilinks between related notes using filenames from the reviewer
 - Add wikilink embeds for diagram files (`![[{canvas-filename}]]`) in idea notes
@@ -265,10 +265,10 @@ obsidian vault="${vault_name}" files folder="${sessions_folder}"
 
 **Fallback** (`obsidian_cli: false`):
 ```
-Glob: ${vault_path}/${sessions_folder}/${YYYY-MM-DD}-session*.md
+Glob: ${vault_path}/${sessions_folder}/${YYYY-MM-DD}-${slug}*.md
 ```
 
-If `{YYYY-MM-DD}-session.md` exists, use `{YYYY-MM-DD}-session-1.md` (increment until no collision).
+If `{YYYY-MM-DD}-{slug}.md` exists, append a numeric suffix (`-1`, `-2`, …) until no collision.
 
 ### Write Order
 
@@ -283,14 +283,14 @@ If `{YYYY-MM-DD}-session.md` exists, use `{YYYY-MM-DD}-session-1.md` (increment 
 
 Append wikilinks of the written notes to today's Obsidian daily note so they are discoverable from the daily hub.
 
-Collect the filename (without `.md` extension) and frontmatter `title` of each note written in Step 5. Build a wikilink block using `[[filename|title]]` alias syntax, with the session note as the parent and other notes nested under it:
+Collect the filename (without `.md` extension) and H1 heading of each note written in Step 5. Build a wikilink block using `[[filename|Type: heading]]` alias syntax, with the session note as the parent and other notes nested under it:
 
 ```markdown
 ## Claude Session
-- [[{session-filename}|{session title}]]
-	- [[{learning-filename}|{learning title}]]
-	- [[{task-filename}|{task title}]]
-	- [[{idea-filename}|{idea title}]]
+- [[{session-filename}|Session: {session heading}]]
+	- [[{learning-filename}|Learning: {learning heading}]]
+	- [[{task-filename}|Task: {task heading}]]
+	- [[{idea-filename}|Idea: {idea heading}]]
 ```
 
 If the session produced no sub-notes (TIL, task, idea), the session link still appears as a standalone item. When sync runs multiple times in a day, each session becomes a separate top-level item under the same heading.

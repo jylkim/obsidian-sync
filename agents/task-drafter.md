@@ -47,6 +47,7 @@ Produce standalone task drafts for each actionable item.
 ---DRAFT---
 title: {descriptive title}
 date: {YYYY-MM-DD}
+project: {project name}
 tags: [claude-code, task, {topic tag}]
 type: task
 priority: {P0|P1|P2|P3}
