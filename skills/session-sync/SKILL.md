@@ -82,6 +82,7 @@ Session Context:
 - Files changed: {from git diff stat}
 - Key decisions: {extracted from conversation}
 - Problems solved: {extracted from conversation}
+- Rejected approaches: {approaches considered but not taken, and why}
 - Tools/technologies used: {notable APIs, libraries, frameworks}
 - Content language: {from config content_language}
 ```

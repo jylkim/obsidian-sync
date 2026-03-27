@@ -75,6 +75,13 @@ type: session-note
 
 - **{Decision}**: {choice} — because {reason}
 
+## Rejected Approaches
+
+### {Approach Title}
+
+**What**: {Approach that was considered but not taken}
+**Why not**: {Reason for rejection}
+
 ## Open Questions
 
 - {Unresolved question}

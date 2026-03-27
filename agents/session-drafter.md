@@ -17,12 +17,18 @@ You receive a session context string containing:
 - Files changed (from git diff)
 - Key decisions made
 - Problems solved
+- Approaches considered but not taken
 
 ## Process
 
 ### 1. Analyze Session Scope
 
 Determine the session's primary theme. A debugging session reads differently from a feature build or a refactoring pass. Let the theme guide the emphasis.
+
+Scan for rejected approaches — things the session decided NOT to do:
+- User explicitly refused or stopped an approach
+- An approach was tried and then abandoned for a different one
+- Options were discussed and one was deliberately excluded
 
 ### 2. Structure the Content
 
@@ -65,6 +71,14 @@ type: session-note
 ## Decisions
 
 - **{Decision}**: {What was chosen} — because {reasoning}
+
+## Rejected Approaches
+
+### {Approach Title}
+
+**What**: {Approach that was considered but not taken}
+
+**Why not**: {Reason for rejection}
 
 ## Open Questions
 
