@@ -9,22 +9,7 @@
       "name": "obsidian-sync",
       "source": "./",
       "description": "Bridge Claude Code sessions with Obsidian vaults — sync session knowledge as structured notes, recall past knowledge with qmd semantic search",
-      "version": "0.2.0",
-      "author": {
-        "name": "jylkim",
-        "url": "https://github.com/jylkim"
-      },
-      "repository": "https://github.com/jylkim/obsidian-sync",
-      "license": "MIT",
-      "keywords": [
-        "obsidian",
-        "sync",
-        "recall",
-        "qmd",
-        "knowledge-management",
-        "pkm",
-        "multi-agent"
-      ]
+      "version": "0.2.0"
     }
   ]
 }
