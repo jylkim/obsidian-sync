@@ -3,7 +3,7 @@ name: session-sync
 description: Sync your current Claude Code session to Obsidian as structured notes. Use when the user says "sync to obsidian", "save session", "write notes to vault", "obsidian sync", or wants to capture session knowledge before ending. Runs a multi-agent pipeline that generates session reports, TIL notes, follow-up tasks, and creative ideas, then writes them to the Obsidian vault. Always use this skill when the user wants to persist session work to their knowledge base.
 version: 0.1.0
 user-invocable: true
-allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Edit, Glob, Grep, Agent, AskUserQuestion
+allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Edit, Glob, Grep, Agent, AskUserQuestion, Skill(obsidian:obsidian-markdown), Skill(obsidian:json-canvas)
 ---
 
 # Obsidian Session Sync
@@ -224,7 +224,9 @@ Convert selected drafts into Obsidian-formatted notes and write to the vault.
 
 ### 5a. Format Drafts → Obsidian Notes
 
-Convert each draft to Obsidian-native format following `references/note-templates.md`:
+Convert each draft to Obsidian-native format following `references/note-templates.md`.
+
+Use the `obsidian:obsidian-markdown` skill for Obsidian-specific syntax:
 
 - Add YAML frontmatter (date, tags, type, etc.)
 - Convert plain text cues to Obsidian syntax (callouts, wikilinks, highlights)
@@ -232,9 +234,9 @@ Convert each draft to Obsidian-native format following `references/note-template
 - Populate `## Related` section with wikilinks from the reviewer's **Related** field (vault notes found during duplicate search)
 - Add wikilink embeds for diagram files (`![[{canvas-filename}]]`) in idea notes
 
-For idea drafts that include a `---DIAGRAM---` block:
+For idea drafts that include a `---DIAGRAM---` block, use the `obsidian:json-canvas` skill:
 
-- Convert the diagram description into a valid [JSON Canvas](https://jsoncanvas.org/) file (`.canvas`)
+- Convert the diagram description into a valid `.canvas` file
 - Assign to the `canvas` folder from config
 
 ### 5b. Write to Vault

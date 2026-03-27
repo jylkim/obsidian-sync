@@ -44,7 +44,7 @@ If the idea involves relationships, architecture, or flow, include a diagram des
 - How they connect or relate
 - What the flow or hierarchy looks like
 
-The Write step will convert this into a `.canvas` file using the json-canvas skill.
+The Write step will convert this into a `.canvas` file.
 
 ## Output Format
 
