@@ -34,6 +34,23 @@ Templates for each note type produced by the /sync workflow. Agents reference th
 - `[[Concept Name]]` — link to a concept (creates if doesn't exist)
 - `[[#Heading]]` — link within the same note
 
+### Inline Concept Wikilinks
+
+Use `[[wikilinks]]` for notable concepts in body text to build Obsidian graph connections.
+
+**Link these:**
+- Technologies and tools: `[[Python]]`, `[[SQLite FTS5]]`, `[[Claude Code]]`
+- Reusable concepts and patterns: `[[multi-agent pipeline]]`, `[[wikilink]]`
+- Named techniques or approaches: `[[backpressure]]`, `[[event sourcing]]`
+
+**Don't link:**
+- Generic verbs, adjectives, or common words
+- Project-internal variable names or file paths (use inline code instead)
+- Terms mentioned only once with no vault significance
+- Terms already linked as `source` or in `## Related`
+
+Aim for 3–7 inline links per note. Over-linking creates graph noise.
+
 ### Tag Conventions
 
 - `#claude-code` — on every generated note
