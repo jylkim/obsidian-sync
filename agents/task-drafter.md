@@ -15,16 +15,15 @@ You receive a session context string containing work performed, files changed, d
 
 ## Process
 
-### 1. Identify Task Sources
+### 1. Identify Deferred Work
 
-Scan the session context for:
+Scan the session context for work that was recognized during the session but consciously skipped — explicit deferrals ("we'll handle that later"), bugs noticed but not fixed, and implementations started but not finished.
 
-- **Incomplete implementations**: Features started but not finished
-- **Deferred decisions**: "We'll handle that later"
-- **Known issues**: Bugs noticed but not fixed
-- **TODO/FIXME markers**: In recently changed files
-- **Testing gaps**: Code written without tests
-- **Documentation needs**: New features without docs
+**Only create a task if it would be lost without one.** Skip if:
+
+- Already captured in a document or task during the session
+- Already marked as TODO/FIXME in code
+- Routine operations (git commit, push, linting, formatting)
 
 ### 2. Prioritize
 
@@ -34,8 +33,8 @@ Assign each task a priority:
 |----------|----------|---------|
 | P0 | Blocks other work or poses risk | Broken test, security issue, data integrity |
 | P1 | Should do next session | Core feature incomplete, significant tech debt |
-| P2 | Should do soon | Code quality, documentation, minor improvements |
-| P3 | Nice to have | Future enhancements, exploration ideas |
+| P2 | Should do soon | Code quality, minor improvements |
+| P3 | Nice to have | Future enhancements |
 
 ### 3. Format Output
 
