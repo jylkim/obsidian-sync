@@ -2,6 +2,7 @@
 name: session-drafter
 description: |
   Generate a structured session report. Summarizes what was accomplished, problems solved, decisions made, and open questions. Used in Phase 1 of the /sync workflow.
+tools: Read, Glob, Grep
 model: sonnet
 ---
 
