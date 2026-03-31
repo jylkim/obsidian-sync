@@ -10,7 +10,7 @@ Templates for each note type produced by the /sync workflow. Agents reference th
 | tags | list | Yes | Always includes `claude-code` |
 | type | string | Yes | `session-note`, `learning`, `task`, or `idea` |
 | project | string | Yes | Working directory name |
-| source | wikilink | TIL only | Links to session note |
+| session | wikilink | Non-session | Links to parent session note by filename |
 | priority | string | Task only | P0, P1, P2, P3 |
 | status | string | Task only | open, in-progress, done |
 | category | string | Idea only | architecture, product, workflow, exploration |
@@ -119,7 +119,7 @@ tags:
   - learning
   - {technology tag}
 type: learning
-source: "[[Session: {description}]]"
+session: "[[{session-filename}]]"
 ---
 
 # {Concise Learning Title}
@@ -159,6 +159,7 @@ tags:
   - task
   - {topic tag}
 type: task
+session: "[[{session-filename}]]"
 priority: {P0|P1|P2|P3}
 status: open
 ---
@@ -198,6 +199,7 @@ tags:
   - idea
   - {category tag}
 type: idea
+session: "[[{session-filename}]]"
 category: {architecture|product|workflow|exploration}
 canvas: "[[{canvas-filename}]]"
 ---

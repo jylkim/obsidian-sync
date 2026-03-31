@@ -11,6 +11,7 @@ A Claude Code plugin that bridges your coding sessions with your Obsidian vault.
 - **Task Tracking**: Follow-up tasks as standalone task notes with priorities
 - **Creative Ideas**: Architecture improvements, product concepts, and visual diagrams
 - **Semantic Recall**: Search past notes with qmd's hybrid retrieval (BM25 + vector + LLM re-ranking)
+- **Live Dashboard**: Obsidian Bases-powered database views for sessions, tasks, learnings, and ideas
 - **Obsidian-Native**: Wikilinks, callouts, frontmatter, tags, and .canvas files
 
 ## Prerequisites
@@ -131,12 +132,41 @@ Default folder layout (customizable via `/configure`):
 ```
 Your Vault/
 └── Claude/
-    ├── Sessions/     # Session report notes
-    ├── Learnings/    # TIL notes
-    ├── Tasks/        # Task notes
-    └── Ideas/        # Idea notes
-        └── canvas/   # .canvas diagram files
+    ├── Dashboard/      # Hub page and cross-type view
+    │   ├── Dashboard.md
+    │   └── recent.base
+    ├── Sessions/       # Session report notes
+    │   ├── sessions.base
+    │   └── *.md
+    ├── Learnings/      # TIL notes
+    │   ├── learnings.base
+    │   └── *.md
+    ├── Tasks/          # Task notes
+    │   ├── tasks.base
+    │   └── *.md
+    └── Ideas/          # Idea notes
+        ├── ideas.base
+        ├── canvas/     # .canvas diagram files
+        └── *.md
 ```
+
+### Dashboard
+
+`/configure` creates a dashboard with live database views of all synced notes. Each `.base` file lives alongside its notes for contextual access.
+
+| File | Location | Views |
+|------|----------|-------|
+| `Dashboard.md` | Dashboard/ | Hub page embedding all views |
+| `sessions.base` | Sessions/ | Recent Sessions, By Project |
+| `learnings.base` | Learnings/ | All Learnings, By Project |
+| `tasks.base` | Tasks/ | Active Tasks, Completed, All Tasks |
+| `ideas.base` | Ideas/ | Idea Board (cards), All Ideas |
+| `recent.base` | Dashboard/ | By Session, Last 30 Days |
+
+Open `Dashboard.md` in Obsidian for a unified overview.
+Open individual `.base` files for full sorting, filtering, and grouping.
+
+Requires Obsidian 1.9.0+ (Bases is a core feature, no community plugins needed).
 
 ## When to Use
 

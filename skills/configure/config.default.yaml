@@ -18,6 +18,7 @@ folders:
   tasks: "Claude/Tasks"
   ideas: "Claude/Ideas"
   canvas: "Claude/Ideas/canvas"
+  dashboard: "Claude/Dashboard"
 
 # Search mode: "hybrid" uses qmd query (BM25 + vector + LLM re-ranking, requires embeddings),
 # "keyword" uses qmd search only (BM25, no embedding needed — faster and lighter)

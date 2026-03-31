@@ -3,7 +3,7 @@ name: configure
 description: Configure obsidian-sync plugin settings — vault name, vault path, qmd collection, and folder structure. Use when the user says "configure obsidian", "set vault path", "obsidian config", "change vault", "switch vault", or when another obsidian-sync skill reports that config is missing. Also use when the user first installs the plugin, wants to reconfigure settings, or mentions that sync or recall isn't working due to missing config.
 version: 0.1.0
 user-invocable: true
-allowed-tools: Bash(qmd *), Bash(obsidian *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, AskUserQuestion
+allowed-tools: Bash(qmd *), Bash(obsidian *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Glob, AskUserQuestion
 ---
 
 # Obsidian Sync Configuration
@@ -104,7 +104,7 @@ For folder structure, offer defaults with option to customize:
 AskUserQuestion:
   question: "Use default folder structure?"
   options:
-    - "Yes (Claude/Sessions, Claude/Learnings, Claude/Tasks, Claude/Ideas, Claude/Ideas/canvas)"
+    - "Yes (Claude/Sessions, Claude/Learnings, Claude/Tasks, Claude/Ideas, Claude/Ideas/canvas, Claude/Dashboard)"
     - "Customize folders"
 ```
 
@@ -152,7 +152,46 @@ mkdir -p "${vault_path}/Claude/Learnings"
 mkdir -p "${vault_path}/Claude/Tasks"
 mkdir -p "${vault_path}/Claude/Ideas"
 mkdir -p "${vault_path}/Claude/Ideas/canvas"
+mkdir -p "${vault_path}/Claude/Dashboard"
 ```
+
+### Step 8: Create Dashboard
+
+Create dashboard files that provide live database views of all synced notes.
+Reference `${CLAUDE_SKILL_DIR}/references/dashboard-templates.md` for complete file contents.
+
+#### 8a. Check for Existing Dashboard
+
+```
+Glob: ${vault_path}/${folders.sessions}/sessions.base
+Glob: ${vault_path}/${folders.dashboard}/Dashboard.md
+```
+
+If files exist:
+
+```
+AskUserQuestion:
+  question: "Dashboard files already exist. Overwrite?"
+  options:
+    - "Keep existing (skip)"
+    - "Regenerate all (overwrites customizations)"
+  default: "Keep existing (skip)"
+```
+
+- "Keep existing" → skip to Output
+- "Regenerate" → proceed to 8b
+- No files found → proceed to 8b without asking
+
+#### 8b. Write Dashboard Files
+
+Write 6 files using the Write tool. Each `.base` file goes into its respective note folder. Replace folder path placeholders (`${folders.sessions}`, `${folders.learnings}`, etc.) in `.base` filter expressions with actual config values.
+
+1. `${vault_path}/${folders.sessions}/sessions.base`
+2. `${vault_path}/${folders.learnings}/learnings.base`
+3. `${vault_path}/${folders.tasks}/tasks.base`
+4. `${vault_path}/${folders.ideas}/ideas.base`
+5. `${vault_path}/${folders.dashboard}/recent.base`
+6. `${vault_path}/${folders.dashboard}/Dashboard.md`
 
 ### Output
 
@@ -164,6 +203,7 @@ Configuration saved to ~/.claude/plugins/obsidian-sync/config.yaml
   Collection: {qmd_collection}
   Write mode: `obsidian` CLI | direct file write
   Folders:    Claude/Sessions, Claude/Learnings, Claude/Tasks, Claude/Ideas
+  Dashboard:  {folders.dashboard}/Dashboard.md
 
 Ready to use /session-sync and /recall.
 ```

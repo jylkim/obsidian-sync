@@ -231,7 +231,7 @@ Use the `obsidian:obsidian-markdown` skill for Obsidian-specific syntax:
 - Add YAML frontmatter (date, tags, type, etc.)
 - Convert plain text cues to Obsidian syntax (callouts, wikilinks, highlights)
 - Convert notable concepts in body text to inline `[[wikilinks]]` (see `references/note-templates.md` § Inline Concept Wikilinks)
-- Add `source` wikilinks between related notes using filenames from the reviewer
+- Add `session` wikilink to all non-session notes using the session filename (e.g., `session: "[[2026-03-31-slug]]"`)
 - Populate `## Related` section with wikilinks from the reviewer's **Related** field (vault notes found during duplicate search)
 - Add wikilink embeds for diagram files (`![[{canvas-filename}]]`) in idea notes
 
