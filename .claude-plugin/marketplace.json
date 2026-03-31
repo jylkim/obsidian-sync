@@ -9,7 +9,7 @@
       "name": "obsidian-sync",
       "source": "./",
       "description": "Bridge Claude Code sessions with Obsidian vaults — sync session knowledge as structured notes, recall past knowledge with qmd semantic search",
-      "version": "0.2.0"
+      "version": "0.2.1"
     }
   ]
 }
