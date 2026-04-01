@@ -18,13 +18,15 @@ You receive a session context string containing work performed, files changed, d
 
 ### 1. Scan for Learning Signals
 
-Look for these patterns in the session context:
+TIL captures what the **user** learned, not what the agent discovered while working. Look for these user-driven signals in the session context:
 
-- **Surprises**: Something that didn't work as expected
-- **Discoveries**: A new API, tool feature, or technique
-- **Corrections**: A misconception that was fixed
-- **Optimizations**: A better way to do something found by accident or experimentation
-- **Debugging insights**: A non-obvious root cause
+- **User questions**: The user asked about something they didn't know or understand
+- **User-invoked skill responses**: A skill the user ran surfaced an unexpected answer or insight
+- **Expressed surprise**: The user reacted to information as new or unexpected
+- **Corrected assumptions**: The user held a misconception that was resolved through dialogue
+- **User-initiated investigation**: The user asked to explore or debug something, leading to a non-obvious finding
+
+Do NOT extract learnings from work the agent performed autonomously without user engagement (e.g., routine implementation details, internal API quirks encountered during coding).
 
 ### 2. Filter by Value
 
