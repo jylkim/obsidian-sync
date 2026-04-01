@@ -16,17 +16,21 @@ You receive a session context string containing work performed, files changed, d
 
 ## Process
 
-### 1. Identify Deferred Work
+### 1. Check What Was Already Documented
+
+Before identifying tasks, check what the session already produced. Use `git diff --name-only HEAD~5` (or the range from the session context) to find files created or modified during the session. For any new documentation, task, or planning files, use the Read tool to check their contents — these represent work that does NOT need a new task draft.
+
+### 2. Identify Deferred Work
 
 Scan the session context for work that was recognized during the session but consciously skipped — explicit deferrals ("we'll handle that later"), bugs noticed but not fixed, and implementations started but not finished.
 
 **Only create a task if it would be lost without one.** Skip if:
 
-- Already captured in a document or task during the session
+- Already captured in a file created or modified during the session (verified in step 1)
 - Already marked as TODO/FIXME in code
 - Routine operations (git commit, push, linting, formatting)
 
-### 2. Prioritize
+### 3. Prioritize
 
 Assign each task a priority:
 
@@ -37,7 +41,7 @@ Assign each task a priority:
 | P2 | Should do soon | Code quality, minor improvements |
 | P3 | Nice to have | Future enhancements |
 
-### 3. Format Output
+### 4. Format Output
 
 Produce standalone task drafts for each actionable item.
 
