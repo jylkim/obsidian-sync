@@ -213,39 +213,34 @@ The note-reviewer:
 
 ## Step 4: Preview & Approval
 
-Present each note as its own AskUserQuestion tab so the user can preview the content and approve or reject individually. Session notes are always approved — exclude them from review.
+Present all notes in a single numbered list and let the user choose which to save. Session notes are always saved — exclude them from the list.
 
-### Batching
+If there are no notes to review (all session or no Phase 1 output), skip this step.
 
-- Group notes into batches of **up to 4** per AskUserQuestion call (tool limit: max 4 questions)
-- If there are more than 4 notes, call AskUserQuestion multiple times
-- If there are no notes to review (all session or no Phase 1 output), skip this step
+### Display Format
 
-### Tab Structure
+Print a numbered list with type tag and title for each note:
 
-Each note becomes one question (tab):
+```
+Notes ready to save:
 
-| Field | Value |
-|-------|-------|
-| **header** | Note type — `Learning`, `Task`, `Idea` (max 12 chars) |
-| **question** | Note title |
-| **multiSelect** | `false` |
-| **options** | See below |
+1. [Learning] SQLite FTS5 requires explicit column weights
+2. [Learning] JSONL session files persist full conversation history
+3. [Task] Add error handling for missing config
+4. [Idea] Event-driven sync pipeline
 
-Options (2):
+Enter note numbers to save (e.g. "1,3,4"), "all" to save all, or "none" to skip all.
+```
 
-1. **"Save"** — include the draft body as markdown in the `preview` field. When the user focuses this option, the content renders on the right side.
-2. **"Skip"** — description: "Do not save this note"
-
-### Preview Content
-
-Use the Phase 1 draft body as-is for the `preview` markdown. Do not include file paths or metadata — the user needs to judge the content, not the destination.
+Then wait for the user's response. Do NOT use AskUserQuestion — just print the list and let the user reply naturally.
 
 ### Handling Responses
 
-- "Save" → include the note in Step 5
-- "Skip" → exclude the note
-- Custom input → treat as an edit request. Display the full note content and allow modifications before proceeding
+- `all` → save all listed notes
+- `none` → skip all listed notes
+- Comma-separated numbers (e.g. `1,3,4`) → save only those notes
+- If the user asks to see a note's content, display it and re-prompt
+- If the user requests edits, apply them and re-prompt
 
 ---
 
