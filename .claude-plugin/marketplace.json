@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "obsidian-sync",
-      "source": "claude/obsidian-sync",
+      "source": "./claude/obsidian-sync",
       "description": "Sync coding session knowledge into an Obsidian vault and recall it later with local search."
     }
   ]
