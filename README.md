@@ -45,21 +45,42 @@ claude --plugin-dir /path/to/repo
 
 ### Codex
 
-The generated Codex target is namespaced under [`codex`](codex). For a home-local install, use the generated marketplace entry from `codex/.agents` and the generated plugin payload from `codex/plugins/obsidian-sync`.
+The generated Codex target is namespaced under [`codex`](codex). For a home-local install, keep your personal marketplace at `~/.agents/plugins/marketplace.json`, and install the plugin payload under `~/.codex/plugins/obsidian-sync`.
 
 If you do not already have a Codex marketplace file:
 
 ```bash
-mkdir -p ~/.agents/plugins ~/plugins
-cp codex/.agents/plugins/marketplace.json ~/.agents/plugins/marketplace.json
-ln -sfn "$(pwd)/codex/plugins/obsidian-sync" ~/plugins/obsidian-sync
+mkdir -p ~/.agents/plugins ~/.codex/plugins
+cp -R codex/plugins/obsidian-sync ~/.codex/plugins/obsidian-sync
+cat > ~/.agents/plugins/marketplace.json <<'EOF'
+{
+  "name": "obsidian-sync",
+  "interface": {
+    "displayName": "Obsidian Sync"
+  },
+  "plugins": [
+    {
+      "name": "obsidian-sync",
+      "source": {
+        "source": "local",
+        "path": "./.codex/plugins/obsidian-sync"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
+EOF
 ```
 
-If you already have `~/.agents/plugins/marketplace.json`, merge the `obsidian-sync` plugin entry from [`codex/.agents/plugins/marketplace.json`](codex/.agents/plugins/marketplace.json) into your existing file instead of overwriting it, then copy or symlink the payload:
+If you already have `~/.agents/plugins/marketplace.json`, merge an `obsidian-sync` plugin entry into your existing file and set its `source.path` to `./.codex/plugins/obsidian-sync`, then copy or symlink the payload:
 
 ```bash
-mkdir -p ~/plugins
-ln -sfn "$(pwd)/codex/plugins/obsidian-sync" ~/plugins/obsidian-sync
+mkdir -p ~/.codex/plugins
+ln -sfn "$(pwd)/codex/plugins/obsidian-sync" ~/.codex/plugins/obsidian-sync
 ```
 
 After updating the marketplace file and plugin path, restart Codex or reopen the workspace so it reloads the plugin registry.
