@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "obsidian-sync",
-      "source": "./",
+      "source": "obsidian-sync",
       "description": "Bridge Claude Code sessions with Obsidian vaults — sync session knowledge as structured notes, recall past knowledge with qmd semantic search"
     }
   ]

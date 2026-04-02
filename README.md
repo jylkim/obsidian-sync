@@ -40,7 +40,7 @@ Obsidian CLI is recommended but not required — the plugin falls back to direct
 ### Local Development
 
 ```bash
-claude --plugin-dir /path/to/obsidian-sync
+claude --plugin-dir /path/to/repo/obsidian-sync
 ```
 
 ## Setup
