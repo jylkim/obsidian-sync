@@ -12,7 +12,7 @@ Identify valuable lessons from the session and turn each into a standalone learn
 
 ## Input
 
-You receive a session context string containing work performed, files changed, decisions made, and problems solved.
+You receive a session context string containing work performed, committed changes (with commit messages), uncommitted changes, decisions made, and problems solved.
 
 ## Process
 

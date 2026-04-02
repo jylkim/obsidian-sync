@@ -64,22 +64,40 @@ Config not found. Run /configure to set up your vault first.
 
 ## Step 1: Gather Session Context
 
-Collect information about the current session:
+Collect information about the current session by combining conversation history with git data.
+
+### 1a. Identify Session Commits
+
+Scan the conversation history for commits made during this session. Extract their hashes to determine the exact range of committed changes.
+
+If commits were made during the session, run:
+
+```bash
+git log --oneline {earliest_commit_hash}^..{latest_commit_hash}
+git diff --stat {earliest_commit_hash}^..{latest_commit_hash}
+```
+
+If no commits were made during the session, skip these commands.
+
+### 1b. Identify Uncommitted Changes
 
 ```bash
 git status --short
-git diff --stat HEAD~5 2>/dev/null || git diff --stat
-git log --oneline -10
+git diff --stat
+git diff --staged --stat
 ```
 
-Construct a session summary from the conversation history and git data:
+### 1c. Construct Session Context
+
+Build the session context from conversation history and the git data above:
 
 ```
 Session Context:
 - Project: {current working directory name}
 - Date: {YYYY-MM-DD}
 - Work performed: {summarize main tasks from conversation}
-- Files changed: {from git diff stat}
+- Committed changes: {from 1a — commit messages and files changed, or "None"}
+- Uncommitted changes: {from 1b — staged/unstaged diffs and untracked files, or "None"}
 - Key decisions: {extracted from conversation}
 - Problems solved: {extracted from conversation}
 - Rejected approaches: {approaches considered but not taken, and why}

@@ -14,7 +14,7 @@ This agent is intentionally powered by a stronger model because creative ideatio
 
 ## Input
 
-You receive a session context string containing work performed, files changed, decisions made, and problems solved.
+You receive a session context string containing work performed, committed changes (with commit messages), uncommitted changes, decisions made, and problems solved.
 
 ## Process
 

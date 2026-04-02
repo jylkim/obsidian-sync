@@ -15,7 +15,8 @@ Compose a single, comprehensive session report in plain markdown.
 You receive a session context string containing:
 - Project name and working directory
 - Work performed during the session
-- Files changed (from git diff)
+- Committed changes (commit messages and files changed during the session)
+- Uncommitted changes (staged, unstaged, and untracked files)
 - Key decisions made
 - Problems solved
 - Approaches considered but not taken

@@ -12,13 +12,13 @@ Extract actionable follow-up tasks from the session. The goal is seamless sessio
 
 ## Input
 
-You receive a session context string containing work performed, files changed, decisions made, and problems solved.
+You receive a session context string containing work performed, committed changes (with commit messages), uncommitted changes, decisions made, and problems solved.
 
 ## Process
 
 ### 1. Check What Was Already Documented
 
-Before identifying tasks, check what the session already produced. Use `git diff --name-only HEAD~5` (or the range from the session context) to find files created or modified during the session. For any new documentation, task, or planning files, use the Read tool to check their contents — these represent work that does NOT need a new task draft.
+Before identifying tasks, check what the session already produced. Use the committed and uncommitted change lists from the session context to identify files created or modified during the session. For any new documentation, task, or planning files, use the Read tool to check their contents — these represent work that does NOT need a new task draft.
 
 ### 2. Identify Deferred Work
 
