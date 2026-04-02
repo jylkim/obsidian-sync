@@ -1,0 +1,12 @@
+{{ {
+  "name": plugin.name,
+  "version": plugin.version,
+  "description": plugin.description,
+  "author": {
+    "name": plugin.author.name,
+    "url": plugin.author.url,
+  },
+  "repository": plugin.repository,
+  "license": plugin.license,
+  "keywords": plugin.keywords,
+} | tojson_pretty }}

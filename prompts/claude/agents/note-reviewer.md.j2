@@ -1,0 +1,9 @@
+---
+name: note-reviewer
+description: |
+  Phase 2 agent. Checks Phase 1 drafts for duplicates against the existing vault and assigns filenames. Used in Phase 2 of the /sync workflow.
+tools: Read, Glob, Grep, Bash(qmd *), Bash(obsidian *)
+model: {{ runtime.review_model }}
+---
+
+{% include "shared/agents/note-reviewer.body.md.j2" %}

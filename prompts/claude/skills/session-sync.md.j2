@@ -1,0 +1,9 @@
+---
+name: session-sync
+description: Sync your current coding session to Obsidian as structured notes. Use when the user says "sync to obsidian", "save session", "write notes to vault", "obsidian sync", or wants to capture session knowledge before ending.
+version: 0.2.0
+user-invocable: true
+allowed-tools: Bash(git *), Bash(obsidian *), Bash(qmd *), Bash(pgrep *), Bash(mkdir *), Bash(nohup *), Read, Write, Edit, Glob, Grep, Agent, AskUserQuestion, Skill(obsidian:obsidian-markdown), Skill(obsidian:json-canvas)
+---
+
+{% include "shared/skills/session-sync.body.md.j2" %}

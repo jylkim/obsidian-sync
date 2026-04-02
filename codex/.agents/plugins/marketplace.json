@@ -1,0 +1,20 @@
+{
+  "name": "obsidian-sync",
+  "interface": {
+    "displayName": "Obsidian Sync"
+  },
+  "plugins": [
+    {
+      "name": "obsidian-sync",
+      "source": {
+        "source": "local",
+        "path": "./plugins/obsidian-sync"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

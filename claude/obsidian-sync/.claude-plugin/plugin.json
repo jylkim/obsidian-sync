@@ -1,0 +1,20 @@
+{
+  "name": "obsidian-sync",
+  "version": "0.5.0",
+  "description": "Sync coding session knowledge into an Obsidian vault and recall it later with local search.",
+  "author": {
+    "name": "jylkim",
+    "url": "https://github.com/jylkim"
+  },
+  "repository": "https://github.com/jylkim/obsidian-sync",
+  "license": "MIT",
+  "keywords": [
+    "obsidian",
+    "sync",
+    "recall",
+    "qmd",
+    "knowledge-management",
+    "pkm",
+    "multi-agent"
+  ]
+}

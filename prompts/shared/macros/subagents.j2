@@ -1,0 +1,84 @@
+{% macro phase1_launch(runtime) -%}
+{% if runtime.target == "claude" %}
+Launch 4 agents simultaneously in a single message. All receive the session context (which includes the JSONL path).
+
+```text
+Agent(
+    subagent_type="obsidian-sync:session-drafter",
+    description="Session report note",
+    prompt="[Session Context]\n\nGenerate a session report note for Obsidian."
+)
+
+Agent(
+    subagent_type="obsidian-sync:til-drafter",
+    description="TIL learning notes",
+    prompt="[Session Context]\n\nExtract learnings and compose TIL notes."
+)
+
+Agent(
+    subagent_type="obsidian-sync:task-drafter",
+    description="Follow-up task notes",
+    prompt="[Session Context]\n\nIdentify follow-up tasks and format for Obsidian."
+)
+
+Agent(
+    subagent_type="obsidian-sync:idea-drafter",
+    description="Creative idea notes",
+    prompt="[Session Context]\n\nGenerate creative ideas inspired by this session."
+)
+```
+{% else %}
+Launch 4 subagents with `fork_context: true`. Each subagent receives the session context summary plus the full parent conversation context.
+
+Open these prompt files and use their contents as the worker prompts:
+
+- `./support/agents/session-drafter.md` with model `{{ runtime.phase1_model }}` and reasoning effort `{{ runtime.phase1_reasoning_effort }}`
+- `./support/agents/til-drafter.md` with model `{{ runtime.phase1_model }}` and reasoning effort `{{ runtime.phase1_reasoning_effort }}`
+- `./support/agents/task-drafter.md` with model `{{ runtime.phase1_model }}` and reasoning effort `{{ runtime.phase1_reasoning_effort }}`
+- `./support/agents/idea-drafter.md` with model `{{ runtime.creative_model }}` and reasoning effort `{{ runtime.creative_reasoning_effort }}`
+
+When launching, prepend a short session context summary to each prompt so the agent can orient quickly before consulting inherited context.
+{% endif %}
+{%- endmacro %}
+
+{% macro review_launch(runtime) -%}
+{% if runtime.target == "claude" %}
+```text
+Agent(
+    subagent_type="obsidian-sync:note-reviewer",
+    description="Check duplicates and assign filenames",
+    prompt="""
+Check drafts for duplicates and assign filenames.
+
+## til-drafter output:
+{til-drafter results}
+
+## task-drafter output:
+{task-drafter results}
+
+## idea-drafter output:
+{idea-drafter results}
+
+## Config:
+vault_path: {vault_path}
+vault_name: {vault_name}
+qmd_collection: {qmd_collection}
+search_mode: {search_mode}
+obsidian_cli: {true/false from Step 1 detection}
+folders: {folders}
+"""
+)
+```
+{% else %}
+Launch a review subagent with `fork_context: true` using `./support/agents/note-reviewer.md`, model `{{ runtime.review_model }}`, and reasoning effort `{{ runtime.review_reasoning_effort }}`.
+
+Pass the Phase 1 outputs inline together with:
+
+- `vault_path`
+- `vault_name`
+- `qmd_collection`
+- `search_mode`
+- `obsidian_cli`
+- `folders`
+{% endif %}
+{%- endmacro %}

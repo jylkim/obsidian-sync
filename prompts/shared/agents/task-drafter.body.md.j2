@@ -1,0 +1,108 @@
+# Task Drafter
+
+Extract actionable follow-up tasks from the session. The goal is seamless session continuity — when you start the next session, you should know exactly what to pick up.
+
+## Input
+
+{% if runtime.session_context_mode == "jsonl" %}
+You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions) and a path to the session JSONL file.
+
+The session context is a brief summary — use it to orient yourself. For full detail, read the session JSONL file using available file or grep tools. The JSONL contains the complete conversation history: user messages, assistant responses, tool calls, and results.
+
+### How to use the JSONL
+
+- Search for deferred work: "later", "TODO", "skip for now", "next session", "backlog"
+- Look for work that was started but not finished, or bugs noticed but not fixed
+- Focus on user messages and assistant action items
+{% else %}
+You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions). You also inherit the parent session context via the subagent launch.
+
+Use the inherited context to search for deferred work, unfinished implementations, noticed bugs, and explicit next-session language.
+{% endif %}
+
+## Process
+
+### 1. Check What Was Already Documented
+
+Before identifying tasks, check what the session already produced. Use the committed and uncommitted change lists from the session context to identify files created or modified during the session. For any new documentation, task, or planning files, inspect their contents — these represent work that does NOT need a new task draft.
+
+### 2. Identify Deferred Work
+
+Scan the session context for work that was recognized during the session but consciously skipped — explicit deferrals, bugs noticed but not fixed, and implementations started but not finished.
+
+**Only create a task if it would be lost without one.** Skip if:
+
+- Already captured in a file created or modified during the session
+- Already marked as TODO/FIXME in code
+- Routine operations (git commit, push, linting, formatting)
+
+### 3. Prioritize
+
+Assign each task a priority:
+
+| Priority | Criteria | Examples |
+|----------|----------|---------|
+| P0 | Blocks other work or poses risk | Broken test, security issue, data integrity |
+| P1 | Should do next session | Core feature incomplete, significant tech debt |
+| P2 | Should do soon | Code quality, minor improvements |
+| P3 | Nice to have | Future enhancements |
+
+### 4. Format Output
+
+Produce standalone task drafts for each actionable item.
+
+## Output Format
+
+```markdown
+---DRAFT---
+title: {descriptive title}
+date: {YYYY-MM-DD}
+project: {project name}
+tags: [{{ plugin.common_tag }}, {{ runtime.origin_tag }}, task, {topic tag}]
+type: task
+priority: {P0|P1|P2|P3}
+status: open
+
+# {Descriptive Title}
+
+**Next Action**: {The specific first step to resume this work}
+
+## Context
+
+{Why this task exists and relevant background}
+
+## Steps
+
+- [ ] {Concrete step 1}
+- [ ] {Concrete step 2}
+- [ ] {Concrete step 3}
+
+## Related Files
+
+- `{path/to/file1}` — {why it's relevant}
+- `{path/to/file2}` — {why it's relevant}
+
+## Notes
+
+{Any additional context, constraints, or caveats}
+---END_DRAFT---
+```
+
+Separate multiple task drafts with `---NEXT_NOTE---`.
+
+## Language
+
+Write all content in the language specified by `content_language` in config. Metadata keys and section headings remain in English.
+
+## Guidelines
+
+- Every task should have a clear "next action" — vague tasks don't get done
+- Include enough context that someone can pick up the task without re-reading the entire session
+- File paths and function names make tasks actionable
+- Prefer fewer, well-scoped tasks over many granular ones
+
+## Edge Cases
+
+- **No follow-ups**: Return `No task notes for this session.`
+- **Everything complete**: Acknowledge completion, suggest only verification tasks if any
+- **Too many tasks**: Focus on P0 and P1; group P2/P3 into a single "backlog" draft

@@ -1,0 +1,40 @@
+{
+  "name": "obsidian-sync",
+  "version": "0.5.0",
+  "description": "Sync coding session knowledge into an Obsidian vault and recall it later with local search.",
+  "author": {
+    "name": "jylkim",
+    "url": "https://github.com/jylkim"
+  },
+  "homepage": "https://github.com/jylkim/obsidian-sync",
+  "repository": "https://github.com/jylkim/obsidian-sync",
+  "license": "MIT",
+  "keywords": [
+    "obsidian",
+    "sync",
+    "recall",
+    "qmd",
+    "knowledge-management",
+    "pkm",
+    "multi-agent"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Obsidian Sync",
+    "shortDescription": "Turn coding sessions into structured Obsidian notes.",
+    "longDescription": "Capture session reports, learnings, follow-up tasks, and ideas in your Obsidian vault, then retrieve them later with qmd-powered local search.",
+    "developerName": "jylkim",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/jylkim/obsidian-sync",
+    "defaultPrompt": [
+      "Save this session to my Obsidian vault.",
+      "Recall what we learned about this pattern before.",
+      "Configure my Obsidian vault for session sync."
+    ],
+    "brandColor": "#4F7A67"
+  }
+}

@@ -1,0 +1,32 @@
+# obsidian-sync configuration
+# This template is used by /configure to generate your config.
+# Config is saved to the resolved obsidian-sync config path.
+
+# Obsidian vault name (used for `obsidian` CLI vault= parameter)
+vault_name: ""
+
+# Absolute path to your vault (used for direct file write fallback)
+vault_path: ""
+
+# qmd collection name for indexing and search
+qmd_collection: ""
+
+# Folder structure within the vault
+folders:
+  sessions: "Agent/Sessions"
+  learnings: "Agent/Learnings"
+  tasks: "Agent/Tasks"
+  ideas: "Agent/Ideas"
+  canvas: "Agent/Ideas/canvas"
+  dashboard: "Agent/Dashboard"
+
+# Search mode: "hybrid" uses qmd query (BM25 + vector + LLM re-ranking, requires embeddings),
+# "keyword" uses qmd search only (BM25, no embedding needed — faster and lighter)
+search_mode: "hybrid"
+
+# Language for note content (templates and structure remain unchanged)
+content_language: "English"
+
+# Tags applied to all generated notes before the runtime adds its provenance tag
+default_tags:
+  - obsidian-sync

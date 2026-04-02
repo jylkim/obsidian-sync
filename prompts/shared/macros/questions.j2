@@ -1,0 +1,40 @@
+{% macro ask_text(runtime, question, answer_var, default=None) -%}
+{% if runtime.question_style == "ask_user_question" %}
+AskUserQuestion:
+  question: "{{ question }}"
+{% if default %}
+  default: "{{ default }}"
+{% endif %}
+  → {{ answer_var }}
+{% else %}
+{{ question }}
+Reply in chat with the value for `{{ answer_var }}`{% if default %}. Default: `{{ default }}`{% endif %}.
+{% endif %}
+{%- endmacro %}
+
+{% macro ask_choice(runtime, question, options, default=None, answer_var=None) -%}
+{% if runtime.question_style == "ask_user_question" %}
+AskUserQuestion:
+  question: "{{ question }}"
+  options:
+{% for option in options %}
+    - "{{ option }}"
+{% endfor %}
+{% if default %}
+  default: "{{ default }}"
+{% endif %}
+{% if answer_var %}
+  → {{ answer_var }}
+{% endif %}
+{% else %}
+{% set rendered_default = default %}
+{% if default in options %}
+{% set rendered_default = options.index(default) + 1 %}
+{% endif %}
+{{ question }}
+{% for option in options %}
+{{ loop.index }}. {{ option }}
+{% endfor %}
+Reply with the number{% if answer_var %} for `{{ answer_var }}`{% endif %}{% if default %}. Default: `{{ rendered_default }}`{% endif %}.
+{% endif %}
+{%- endmacro %}

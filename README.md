@@ -1,195 +1,106 @@
-# Obsidian Sync Plugin
+# Obsidian Sync
 
-A Claude Code plugin that bridges your coding sessions with your Obsidian vault. Sync session knowledge as structured notes, then recall it later with semantic search.
+Obsidian Sync turns coding sessions into structured notes inside an Obsidian vault and lets you recall that knowledge later with local search.
+
+This repository now builds two plugin targets from a shared prompt source:
+
+- Claude plugin output in [`claude`](claude)
+- Codex plugin output in [`codex`](codex)
+
+The plugin payloads live under those target directories. The only repo-root exception is Claude's `.claude-plugin`, which stays at the root for production use:
+
+- `claude/obsidian-sync/.claude-plugin` + [`.claude-plugin`](.claude-plugin)
+- `codex/plugins/obsidian-sync` + `codex/.agents`
 
 ## Features
 
-- **Multi-Agent Sync Pipeline**: 4 specialized agents analyze your session from different angles
-- **2-Phase Architecture**: Parallel analysis followed by sequential validation
-- **Session Reports**: Structured notes capturing what you accomplished, decided, and solved
-- **TIL Notes**: Automatically extracted learnings with code examples
-- **Task Tracking**: Follow-up tasks as standalone task notes with priorities
-- **Creative Ideas**: Architecture improvements, product concepts, and visual diagrams
-- **Semantic Recall**: Search past notes with qmd's hybrid retrieval (BM25 + vector + LLM re-ranking)
-- **Live Dashboard**: Obsidian Bases-powered database views for sessions, tasks, learnings, and ideas
-- **Obsidian-Native**: Wikilinks, callouts, frontmatter, tags, and .canvas files
-
-## Prerequisites
-
-| Tool | Purpose | Install |
-|------|---------|---------|
-| [Obsidian](https://obsidian.md) | Note-taking app | [obsidian.md](https://obsidian.md) |
-| Obsidian CLI | Vault CRUD operations | Enable in Obsidian Settings → CLI |
-| [obsidian-skills](https://github.com/kepano/obsidian-skills) | Obsidian formatting patterns | Claude Code plugin |
-| [qmd](https://github.com/tobi/qmd) | Semantic search engine | `npm install -g @tobilu/qmd` |
-
-Obsidian CLI is recommended but not required — the plugin falls back to direct file writes when it's unavailable.
+- Multi-agent session capture for reports, learnings, follow-up tasks, and ideas
+- qmd-based local recall with semantic and keyword search
+- Obsidian-native output with wikilinks, callouts, frontmatter, and `.canvas` files
+- Dashboard and Bases templates for sessions, learnings, tasks, and ideas
+- Shared template source for Claude and Codex runtimes
 
 ## Installation
 
-### From GitHub
+Generate the target artifacts first:
 
 ```bash
-# Add as marketplace
-/plugin marketplace add jylkim/obsidian-sync
+uv run scripts/build_plugin.py --target all
+```
 
-# Install
+### Claude
+
+If you publish this plugin through Claude's marketplace flow, the legacy install commands from the original README still apply:
+
+```bash
+/plugin marketplace add jylkim/obsidian-sync
 /plugin install obsidian-sync@jylkim-obsidian-sync
 ```
 
-### Local Development
+For local development or local use from this repository, point Claude at the repository root. The root [`.claude-plugin`](.claude-plugin) metadata resolves the actual plugin payload under `claude/obsidian-sync`.
 
 ```bash
-claude --plugin-dir /path/to/repo/obsidian-sync
+claude --plugin-dir /path/to/repo
 ```
 
-## Setup
+### Codex
 
-```
-/configure
-```
+The generated Codex target is namespaced under [`codex`](codex). For a home-local install, use the generated marketplace entry from `codex/.agents` and the generated plugin payload from `codex/plugins/obsidian-sync`.
 
-This will prompt you for:
-- Vault name and path
-- qmd collection name
-- Folder structure preferences
+If you do not already have a Codex marketplace file:
 
-## Usage
-
-### Sync Session to Obsidian
-
-```
-/session-sync
+```bash
+mkdir -p ~/.agents/plugins ~/plugins
+cp codex/.agents/plugins/marketplace.json ~/.agents/plugins/marketplace.json
+ln -sfn "$(pwd)/codex/plugins/obsidian-sync" ~/plugins/obsidian-sync
 ```
 
-Runs the full sync workflow:
-1. Gather session context (git status, conversation history)
-2. Phase 1: 4 agents analyze in parallel (session report, TILs, tasks, ideas)
-3. Phase 2: Validate and deduplicate against existing vault
-4. Preview notes and select which to save
-5. Write to Obsidian vault
-6. Index with qmd for future recall
+If you already have `~/.agents/plugins/marketplace.json`, merge the `obsidian-sync` plugin entry from [`codex/.agents/plugins/marketplace.json`](codex/.agents/plugins/marketplace.json) into your existing file instead of overwriting it, then copy or symlink the payload:
 
-### Recall Past Knowledge
-
-```
-/recall what was that retry pattern we used?
+```bash
+mkdir -p ~/plugins
+ln -sfn "$(pwd)/codex/plugins/obsidian-sync" ~/plugins/obsidian-sync
 ```
 
-Searches your vault using qmd's hybrid search and presents relevant notes with excerpts.
+After updating the marketplace file and plugin path, restart Codex or reopen the workspace so it reloads the plugin registry.
 
-## Architecture
+## Repository Layout
 
-```
-Phase 1: Analysis (Parallel)
-┌──────────────────┬──────────────────┐
-│  session-drafter │  til-drafter     │  sonnet
-│  (session report)│  (learnings)     │
-├──────────────────┼──────────────────┤
-│  task-drafter    │  idea-drafter    │  sonnet / opus
-│  (follow-ups)    │  (creative ideas)│
-└──────────────────┴──────────────────┘
-                    │
-                    ▼
-Phase 2: Validation (Sequential)
-┌────────────────────────────────────────┐
-│            note-reviewer               │  sonnet
-│  (validate, deduplicate, finalize)     │
-└────────────────────────────────────────┘
-                    │
-                    ▼
-              User Selection
-                    │
-                    ▼
-         Write to Obsidian Vault
-                    │
-                    ▼
-           qmd update & embed
+- [`data`](data) contains shared plugin metadata and runtime profiles
+- [`prompts`](prompts) contains shared and target-specific Jinja templates
+- [`scripts/build_plugin.py`](scripts/build_plugin.py) renders generated artifacts
+- [`claude`](claude) contains the generated Claude plugin payload
+- [`codex`](codex) contains the generated Codex plugin payload
+- [`.claude-plugin`](.claude-plugin) contains the Claude marketplace metadata
+- `codex/.agents` contains the Codex marketplace metadata
+
+## Build
+
+```bash
+uv run scripts/build_plugin.py --target all
+uv run scripts/build_plugin.py --check
 ```
 
-## Agents
+`--target claude` and `--target codex` are also supported.
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| `session-drafter` | sonnet | Compose structured session report |
-| `til-drafter` | sonnet | Extract learnings as TIL notes |
-| `task-drafter` | sonnet | Identify follow-up tasks with priorities |
-| `idea-drafter` | opus | Generate creative ideas and visual diagrams |
-| `note-reviewer` | sonnet | Validate, deduplicate, and finalize all notes |
+Running the build rewrites the selected target roots and removes legacy generated outputs from older layouts.
 
-## Skills
+## Runtime Notes
 
-| Skill | Command | Purpose |
-|-------|---------|---------|
-| session-sync | `/session-sync` | Full session sync workflow |
-| recall | `/recall` | Semantic vault search |
-| configure | `/configure` | Plugin configuration |
+- Config resolves from `OBSIDIAN_SYNC_CONFIG` first.
+- On non-Windows systems, the default config path is `${XDG_CONFIG_HOME:-~/.config}/obsidian-sync/config.yaml`.
+- On Windows, the Codex target documents `%APPDATA%\obsidian-sync\config.yaml`.
+- Default vault folders are `Agent/Sessions`, `Agent/Learnings`, `Agent/Tasks`, `Agent/Ideas`, `Agent/Ideas/canvas`, and `Agent/Dashboard`.
 
-## Vault Structure
+## Prerequisites
 
-Default folder layout (customizable via `/configure`):
-
-```
-Your Vault/
-└── Claude/
-    ├── Dashboard/      # Hub page and cross-type view
-    │   ├── Dashboard.md
-    │   └── recent.base
-    ├── Sessions/       # Session report notes
-    │   ├── sessions.base
-    │   └── *.md
-    ├── Learnings/      # TIL notes
-    │   ├── learnings.base
-    │   └── *.md
-    ├── Tasks/          # Task notes
-    │   ├── tasks.base
-    │   └── *.md
-    └── Ideas/          # Idea notes
-        ├── ideas.base
-        ├── canvas/     # .canvas diagram files
-        └── *.md
-```
-
-### Dashboard
-
-`/configure` creates a dashboard with live database views of all synced notes. Each `.base` file lives alongside its notes for contextual access.
-
-| File | Location | Views |
-|------|----------|-------|
-| `Dashboard.md` | Dashboard/ | Hub page embedding all views |
-| `sessions.base` | Sessions/ | Recent Sessions, By Project |
-| `learnings.base` | Learnings/ | All Learnings, By Project |
-| `tasks.base` | Tasks/ | Active Tasks, Completed, All Tasks |
-| `ideas.base` | Ideas/ | Idea Board (cards), All Ideas |
-| `recent.base` | Dashboard/ | By Session, Last 30 Days |
-
-Open `Dashboard.md` in Obsidian for a unified overview.
-Open individual `.base` files for full sorting, filtering, and grouping.
-
-Requires Obsidian 1.9.0+ (Bases is a core feature, no community plugins needed).
-
-## When to Use
-
-**Use `/session-sync` when:**
-- Ending a productive work session
-- After completing a feature or fixing a significant bug
-- Before switching to a different project
-- When you want to capture knowledge for future reference
-
-**Use `/recall` when:**
-- Starting a new session and need context from past work
-- Trying to remember how you solved a similar problem
-- Looking for past decisions or architectural notes
-- Searching for code patterns you've encountered before
-
-**Skip when:**
-- Very short session with trivial changes
-- Only reading/exploring code
-- Quick one-off question
-
-## Acknowledgements
-
-This plugin is heavily inspired by [session-wrap](https://github.com/team-attention/plugins-for-claude-natives#session-wrap) from [plugins-for-claude-natives](https://github.com/team-attention/plugins-for-claude-natives).
+| Tool | Purpose |
+|------|---------|
+| [Obsidian](https://obsidian.md) | Note-taking app and vault host |
+| Obsidian CLI | Vault CRUD operations and daily note integration |
+| [qmd](https://github.com/tobi/qmd) | Local indexing and recall |
+| `obsidian:obsidian-markdown` skill | Obsidian-native note formatting |
+| `obsidian:json-canvas` skill | `.canvas` generation for idea diagrams |
 
 ## License
 

@@ -1,0 +1,25 @@
+{{ {
+  "name": plugin.name,
+  "version": plugin.version,
+  "description": plugin.description,
+  "author": {
+    "name": plugin.author.name,
+    "url": plugin.author.url,
+  },
+  "homepage": plugin.homepage,
+  "repository": plugin.repository,
+  "license": plugin.license,
+  "keywords": plugin.keywords,
+  "skills": "./skills/",
+  "interface": {
+    "displayName": plugin.display_name,
+    "shortDescription": plugin.short_description,
+    "longDescription": plugin.long_description,
+    "developerName": plugin.developer_name,
+    "category": plugin.category,
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": plugin.homepage,
+    "defaultPrompt": plugin.default_prompts,
+    "brandColor": plugin.brand_color,
+  },
+} | tojson_pretty }}

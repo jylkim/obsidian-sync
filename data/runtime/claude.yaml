@@ -1,0 +1,24 @@
+target: claude
+platform_name: Claude Code
+origin_tag: claude-code
+question_style: ask_user_question
+skill_dir_reference: ${CLAUDE_SKILL_DIR}
+agent_prompts_root: agents
+session_context_mode: jsonl
+phase1_model: sonnet
+creative_model: opus
+review_model: sonnet
+config_path_reference: ~/.config/obsidian-sync/config.yaml
+config_path_resolution:
+  - 'Environment override: `OBSIDIAN_SYNC_CONFIG`'
+  - 'Default path: `${XDG_CONFIG_HOME:-~/.config}/obsidian-sync/config.yaml`'
+config_path_write_command: mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/obsidian-sync"
+config_path_read_label: ~/.config/obsidian-sync/config.yaml
+supports_windows_config_path: false
+marketplace_path: .claude-plugin/marketplace.json
+plugin_root: claude/obsidian-sync
+skills_root: claude/obsidian-sync/skills
+agents_root: claude/obsidian-sync/agents
+supports_agent_definition_files: true
+supports_subagent_fork_context: false
+subagent_prompt_reference: obsidian-sync:{agent_name}

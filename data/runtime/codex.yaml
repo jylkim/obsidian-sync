@@ -1,0 +1,28 @@
+target: codex
+platform_name: Codex
+origin_tag: codex
+question_style: numbered_list
+skill_dir_reference: relative to the current skill directory
+agent_prompts_root: support/agents
+session_context_mode: fork_context
+phase1_model: gpt-5.4-mini
+phase1_reasoning_effort: xhigh
+creative_model: gpt-5.4
+creative_reasoning_effort: xhigh
+review_model: gpt-5.4-mini
+review_reasoning_effort: xhigh
+config_path_reference: platform-specific obsidian-sync config path
+config_path_resolution:
+  - 'Environment override: `OBSIDIAN_SYNC_CONFIG`'
+  - 'Windows default: `%APPDATA%\\obsidian-sync\\config.yaml`'
+  - 'Non-Windows default: `${XDG_CONFIG_HOME:-~/.config}/obsidian-sync/config.yaml`'
+  - 'Final fallback: `~/.config/obsidian-sync/config.yaml`'
+config_path_read_label: resolved obsidian-sync config path
+supports_windows_config_path: true
+marketplace_path: codex/.agents/plugins/marketplace.json
+plugin_root: plugins/obsidian-sync
+skills_root: plugins/obsidian-sync/skills
+agents_root: plugins/obsidian-sync/support/agents
+supports_agent_definition_files: false
+supports_subagent_fork_context: true
+subagent_prompt_reference: ./support/agents/{agent_name}.md

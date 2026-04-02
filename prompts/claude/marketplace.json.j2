@@ -1,0 +1,14 @@
+{{ {
+  "name": plugin.name,
+  "owner": {
+    "name": plugin.author.name,
+    "email": "",
+  },
+  "plugins": [
+    {
+      "name": plugin.name,
+      "source": runtime.plugin_root,
+      "description": plugin.description,
+    }
+  ],
+} | tojson_pretty }}

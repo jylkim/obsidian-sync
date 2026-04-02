@@ -1,0 +1,21 @@
+{% macro config_path_reference(runtime) -%}
+{{ runtime.config_path_reference }}
+{%- endmacro %}
+
+{% macro config_path_read_label(runtime) -%}
+{{ runtime.config_path_read_label }}
+{%- endmacro %}
+
+{% macro config_path_resolution(runtime) -%}
+{% for line in runtime.config_path_resolution %}
+- {{ line }}
+{% endfor %}
+{%- endmacro %}
+
+{% macro folder_summary(plugin) -%}
+`{{ plugin.default_folders.sessions }}`, `{{ plugin.default_folders.learnings }}`, `{{ plugin.default_folders.tasks }}`, `{{ plugin.default_folders.ideas }}`, `{{ plugin.default_folders.canvas }}`, `{{ plugin.default_folders.dashboard }}`
+{%- endmacro %}
+
+{% macro daily_section_title() -%}
+Agent Session
+{%- endmacro %}

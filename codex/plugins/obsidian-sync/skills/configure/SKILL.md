@@ -1,0 +1,202 @@
+---
+name: configure
+description: Configure obsidian-sync settings — vault name, vault path, qmd collection, and folder structure.
+---
+
+# Obsidian Sync Configuration
+
+Interactive setup for obsidian-sync. Saves configuration to a fixed path so all skills can find it.
+
+## Config File Location
+
+Use the resolved obsidian-sync config path:
+
+- Environment override: `OBSIDIAN_SYNC_CONFIG`
+- Windows default: `%APPDATA%\\obsidian-sync\\config.yaml`
+- Non-Windows default: `${XDG_CONFIG_HOME:-~/.config}/obsidian-sync/config.yaml`
+- Final fallback: `~/.config/obsidian-sync/config.yaml`
+
+
+## Workflow
+
+### Step 1: Check Existing Config
+
+Read the existing config from `resolved obsidian-sync config path`.
+
+- If found: display current values and ask what to change
+- If not found: proceed to interactive setup
+
+### Step 2: Check Prerequisites
+
+#### qmd
+
+```bash
+qmd --help 2>/dev/null
+```
+
+- Fails: display install instructions (`npm install -g @tobilu/qmd`) and stop
+- Succeeds: continue
+
+### Step 3: Detect Vault
+
+First check if Obsidian is running (CLI requires the app to be open — calling it when Obsidian is closed may launch the app and block):
+
+```bash
+pgrep -xi obsidian >/dev/null 2>&1
+```
+
+#### If Obsidian is running — try auto-detect
+
+```bash
+obsidian vaults verbose 2>/dev/null | grep -v "^[0-9]" | grep -v "installer"
+```
+
+Output is tab-separated: `{vault_name}\t{vault_path}`, one line per vault.
+
+- **1 vault found**: use it automatically, confirm with the user
+- **Multiple vaults**: present the list and let the user choose
+- **Command fails or 0 vaults**: CLI is not enabled. Fall through to manual input
+
+#### If Obsidian is not running or CLI fails — manual input
+
+```text
+Enter your Obsidian vault name (as shown in Obsidian app):
+Reply in chat with the value for `vault_name`.
+
+```
+
+```text
+Enter the absolute path to your vault directory:
+Reply in chat with the value for `vault_path`.
+
+```
+
+Warn the user that `obsidian` CLI is not available — direct file write will be used as fallback for `/session-sync`.
+
+### Step 4: Remaining Settings
+
+```text
+Choose a name for the qmd collection (used for search indexing):
+Reply in chat with the value for `qmd_collection`. Default: `derived from vault_name (lowercase, hyphens)`.
+
+```
+
+```text
+Search mode?
+1. hybrid
+2. keyword
+Reply with the number for `search_mode`. Default: `1`.
+
+```
+
+- `hybrid`: BM25 + vector + LLM re-ranking — requires embeddings, slower setup
+- `keyword`: BM25 only — no embeddings needed, faster and lighter
+
+```text
+Language for note content? (templates and structure stay the same)
+Reply in chat with the value for `content_language`. Default: `English`.
+
+```
+
+For folder structure, offer defaults with option to customize:
+
+```text
+Use default folder structure?
+1. use-default-folders
+2. customize-folders
+Reply with the number for `folder_mode`. Default: `1`.
+
+```
+
+Default folders:
+
+- `Agent/Sessions`
+- `Agent/Learnings`
+- `Agent/Tasks`
+- `Agent/Ideas`
+- `Agent/Ideas/canvas`
+- `Agent/Dashboard`
+
+### Step 5: Save Config
+
+Create the parent directory for the resolved config path, then write the YAML config.
+
+Reference `config.default.yaml` in the current skill directory for the template structure.
+
+### Step 6: Register qmd Collection
+
+```bash
+qmd collection list --json
+```
+
+- Collection exists: skip
+- Collection missing: register it:
+  ```bash
+  qmd collection add "${vault_path}" --name "${qmd_collection}"
+  ```
+
+Then run initial indexing:
+
+```bash
+qmd update --collection "${qmd_collection}"
+```
+
+If `search_mode` is `hybrid`, also generate embeddings:
+
+```bash
+nohup qmd embed --collection "${qmd_collection}" > /dev/null 2>&1 &
+echo "Embedding generation started in background."
+```
+
+If `search_mode` is `keyword`, skip embedding entirely.
+
+### Step 7: Create Vault Folders
+
+```bash
+mkdir -p "${vault_path}/Agent/Sessions"
+mkdir -p "${vault_path}/Agent/Learnings"
+mkdir -p "${vault_path}/Agent/Tasks"
+mkdir -p "${vault_path}/Agent/Ideas"
+mkdir -p "${vault_path}/Agent/Ideas/canvas"
+mkdir -p "${vault_path}/Agent/Dashboard"
+```
+
+### Step 8: Create Dashboard
+
+Create dashboard files that provide live database views of all synced notes.
+Reference `references/dashboard-templates.md` for complete file contents.
+
+#### 8a. Check for Existing Dashboard
+
+Check for:
+
+- `${vault_path}/${folders.sessions}/sessions.base`
+- `${vault_path}/${folders.dashboard}/Dashboard.md`
+
+If files exist, ask whether to keep them or regenerate all files.
+
+#### 8b. Write Dashboard Files
+
+Write 6 files. Each `.base` file goes into its respective note folder. Replace folder path placeholders (`${folders.sessions}`, `${folders.learnings}`, etc.) in `.base` filter expressions with actual config values.
+
+1. `${vault_path}/${folders.sessions}/sessions.base`
+2. `${vault_path}/${folders.learnings}/learnings.base`
+3. `${vault_path}/${folders.tasks}/tasks.base`
+4. `${vault_path}/${folders.ideas}/ideas.base`
+5. `${vault_path}/${folders.dashboard}/recent.base`
+6. `${vault_path}/${folders.dashboard}/Dashboard.md`
+
+### Output
+
+```text
+Configuration saved to resolved obsidian-sync config path
+
+  Vault:      {vault_name}
+  Path:       {vault_path}
+  Collection: {qmd_collection}
+  Write mode: `obsidian` CLI | direct file write
+  Folders:    Agent/Sessions, Agent/Learnings, Agent/Tasks, Agent/Ideas
+  Dashboard:  {folders.dashboard}/Dashboard.md
+
+Ready to use /session-sync and /recall.
+```

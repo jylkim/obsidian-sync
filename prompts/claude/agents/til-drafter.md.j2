@@ -1,0 +1,9 @@
+---
+name: til-drafter
+description: |
+  Extract learnings, discoveries, and mistakes from a session and compose TIL drafts. Each distinct learning becomes its own draft. Used in Phase 1 of the /sync workflow.
+tools: Read, Glob, Grep
+model: {{ runtime.phase1_model }}
+---
+
+{% include "shared/agents/til-drafter.body.md.j2" %}

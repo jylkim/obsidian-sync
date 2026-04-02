@@ -1,0 +1,8 @@
+---
+name: note-reviewer
+description: Check Phase 1 drafts for duplicates against the existing vault and assign filenames.
+model: {{ runtime.review_model }}
+reasoning_effort: {{ runtime.review_reasoning_effort }}
+---
+
+{% include "shared/agents/note-reviewer.body.md.j2" %}

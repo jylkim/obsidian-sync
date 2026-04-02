@@ -1,0 +1,8 @@
+---
+name: task-drafter
+description: Identify incomplete work, follow-up tasks, and action items from a session.
+model: {{ runtime.phase1_model }}
+reasoning_effort: {{ runtime.phase1_reasoning_effort }}
+---
+
+{% include "shared/agents/task-drafter.body.md.j2" %}
