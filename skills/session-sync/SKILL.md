@@ -87,25 +87,38 @@ git diff --stat
 git diff --staged --stat
 ```
 
-### 1c. Construct Session Context
+### 1c. Resolve Session JSONL Path
 
-Build the session context from conversation history and the git data above:
+The current session ID is `${CLAUDE_SESSION_ID}`. Construct the JSONL path:
+
+```
+~/.claude/projects/{encoded-project-path}/${CLAUDE_SESSION_ID}.jsonl
+```
+
+Where `{encoded-project-path}` is the absolute path of the working directory with `/` replaced by `-` (e.g., `/Users/me/projects/foo` → `-Users-me-projects-foo`).
+
+Verify the file exists before passing it to agents. If it doesn't exist, fall back to the session context summary alone.
+
+### 1d. Construct Session Context
+
+Build a lightweight session context as a roadmap for Phase 1 agents. This is NOT the agents' primary source — they will read the session JSONL directly for full detail. The summary helps agents orient quickly and know what to search for.
 
 ```
 Session Context:
 - Project: {current working directory name}
 - Date: {YYYY-MM-DD}
-- Work performed: {summarize main tasks from conversation}
+- Session JSONL: {resolved path from 1c, or "unavailable"}
+- Work performed: {brief list of main topics/tasks}
 - Committed changes: {from 1a — commit messages and files changed, or "None"}
 - Uncommitted changes: {from 1b — staged/unstaged diffs and untracked files, or "None"}
-- Key decisions: {extracted from conversation}
-- Problems solved: {extracted from conversation}
-- Rejected approaches: {approaches considered but not taken, and why}
+- Key decisions: {brief list}
+- Problems solved: {brief list}
+- Rejected approaches: {brief list}
 - Tools/technologies used: {notable APIs, libraries, frameworks}
 - Content language: {from config content_language}
 ```
 
-Keep the summary concise — focus on what matters, not exhaustive detail. Cap at roughly 500 words to avoid overwhelming Phase 1 agents.
+Keep this concise — it is a roadmap, not a comprehensive record. Agents will consult the JSONL for details.
 
 Also detect Obsidian CLI availability (used by Phase 2 reviewer and Step 5 write):
 
@@ -119,7 +132,7 @@ Store the result as `obsidian_cli: true/false` for later steps.
 
 ## Step 2: Phase 1 — Parallel Analysis
 
-Launch 4 agents simultaneously in a single message. All receive the same session context.
+Launch 4 agents simultaneously in a single message. All receive the session context (which includes the JSONL path).
 
 ```
 Agent(

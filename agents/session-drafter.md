@@ -12,14 +12,15 @@ Compose a single, comprehensive session report in plain markdown.
 
 ## Input
 
-You receive a session context string containing:
-- Project name and working directory
-- Work performed during the session
-- Committed changes (commit messages and files changed during the session)
-- Uncommitted changes (staged, unstaged, and untracked files)
-- Key decisions made
-- Problems solved
-- Approaches considered but not taken
+You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions) and a path to the session JSONL file.
+
+The session context is a brief summary — use it to orient yourself. For full detail, read the session JSONL file using the Read or Grep tools. The JSONL contains the complete conversation history: user messages, assistant responses, tool calls, and results.
+
+### How to use the JSONL
+
+- Grep for keywords from the session context to find relevant sections
+- Focus on user messages and assistant text responses (skip tool call/result noise)
+- Look for: work performed, problems encountered and solved, decisions made, approaches rejected
 
 ## Process
 

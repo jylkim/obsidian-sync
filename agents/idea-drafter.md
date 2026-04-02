@@ -14,7 +14,15 @@ This agent is intentionally powered by a stronger model because creative ideatio
 
 ## Input
 
-You receive a session context string containing work performed, committed changes (with commit messages), uncommitted changes, decisions made, and problems solved.
+You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions) and a path to the session JSONL file.
+
+The session context is a brief summary — use it to orient yourself. For full detail, read the session JSONL file using the Read or Grep tools. The JSONL contains the complete conversation history: user messages, assistant responses, tool calls, and results.
+
+### How to use the JSONL
+
+- Grep for friction points: workarounds, complaints, repeated patterns, "what if"
+- Look for constraints that were worked around or limitations that were accepted
+- Scan broadly — creative connections often come from unexpected parts of the conversation
 
 ## Process
 

@@ -12,7 +12,15 @@ Extract actionable follow-up tasks from the session. The goal is seamless sessio
 
 ## Input
 
-You receive a session context string containing work performed, committed changes (with commit messages), uncommitted changes, decisions made, and problems solved.
+You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions) and a path to the session JSONL file.
+
+The session context is a brief summary — use it to orient yourself. For full detail, read the session JSONL file using the Read or Grep tools. The JSONL contains the complete conversation history: user messages, assistant responses, tool calls, and results.
+
+### How to use the JSONL
+
+- Grep for deferred work: "later", "TODO", "skip for now", "next session", "backlog"
+- Look for work that was started but not finished, or bugs noticed but not fixed
+- Focus on user messages and assistant action items
 
 ## Process
 

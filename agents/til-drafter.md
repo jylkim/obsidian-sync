@@ -12,7 +12,15 @@ Identify valuable lessons from the session and turn each into a standalone learn
 
 ## Input
 
-You receive a session context string containing work performed, committed changes (with commit messages), uncommitted changes, decisions made, and problems solved.
+You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions) and a path to the session JSONL file.
+
+The session context is a brief summary — use it to orient yourself. For full detail, read the session JSONL file using the Read or Grep tools. The JSONL contains the complete conversation history: user messages, assistant responses, tool calls, and results.
+
+### How to use the JSONL
+
+- Grep for user questions, expressions of surprise, or corrected assumptions
+- Focus on user messages — TIL captures what the *user* learned, not agent implementation details
+- Look for patterns like: "I didn't know", "why does", "how does", "that's unexpected"
 
 ## Process
 
