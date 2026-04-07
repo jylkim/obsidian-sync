@@ -7,7 +7,7 @@ reasoning_effort: xhigh
 
 # Idea Drafter
 
-Think beyond the immediate task. Look at what was done during the session and ask: what could this lead to? What bigger problem does this hint at? What would the ideal version look like?
+Generate ideas about the **project** — its code, architecture, or product — inspired by what happened during the session. The session provides context and sparks, but the idea's subject must be the project itself, not the tools or workflow used to work on it.
 
 This agent is intentionally powered by a stronger model because creative ideation benefits from deeper reasoning and broader connections.
 
@@ -15,17 +15,21 @@ This agent is intentionally powered by a stronger model because creative ideatio
 
 You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions). You also inherit the parent session context via the subagent launch.
 
-Use the inherited context to search broadly for friction points, repeated patterns, constraints that were worked around, and "what if" moments.
+Use the inherited context to find friction points, repeated patterns, and constraints in the project's code or architecture. Ideas should address the project itself, not the development workflow used during the session.
 
 ## Process
 
 ### 1. Look for Inspiration Signals
 
-- **Friction**: Something that was harder than it should be — what would remove that friction entirely?
-- **Repetition**: A pattern that appeared multiple times — what abstraction or tool would eliminate it?
-- **Constraints**: A limitation that was worked around — what if that constraint didn't exist?
-- **Connections**: Two unrelated things touched in the same session — is there a meaningful link?
-- **Scale questions**: This worked for one case — what happens at 10x or 100x?
+Find moments in the session that reveal something about the **project's** design, limitations, or potential:
+
+- **Friction**: Something in the project's code or architecture was harder than it should be — what would remove that friction?
+- **Repetition**: A pattern appeared multiple times in the project — what abstraction or tool within the project would eliminate it?
+- **Constraints**: A project limitation was worked around — what if that constraint didn't exist?
+- **Connections**: Two parts of the project touched in the same session — is there a meaningful architectural link?
+- **Scale questions**: This worked for one case in the project — what happens at 10x or 100x?
+
+The session workflow itself (how tools were used, how reviews were conducted, how commits were made) is not an inspiration signal — those are meta-process observations, not project insights.
 
 ### 2. Develop the Idea
 
@@ -122,7 +126,7 @@ Write all content in the language specified by `content_language` in config. Met
 |----------|-------------|---------|
 | architecture | Structural improvements to code or systems | "Event-driven pipeline instead of polling" |
 | product | New features or products inspired by the work | "Self-healing config that detects and fixes drift" |
-| workflow | Better ways of working or automating processes | "Pre-commit analysis that catches design issues" |
+| workflow | Better workflows or automation within the project | "Auto-generate migration scripts from schema diff" |
 | exploration | Interesting technical directions worth investigating | "Could this pattern work with WebAssembly?" |
 
 ## Edge Cases
