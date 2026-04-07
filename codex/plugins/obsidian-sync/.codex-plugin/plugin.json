@@ -1,6 +1,6 @@
 {
   "name": "obsidian-sync",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Sync coding session knowledge into an Obsidian vault and recall it later with local search.",
   "author": {
     "name": "jylkim",
