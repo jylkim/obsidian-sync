@@ -1,5 +1,5 @@
 name: obsidian-sync
-version: 0.5.2
+version: 0.5.3
 display_name: Obsidian Sync
 description: Sync coding session knowledge into an Obsidian vault and recall it later with local search.
 short_description: Turn coding sessions into structured Obsidian notes.
