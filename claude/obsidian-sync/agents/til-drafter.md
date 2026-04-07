@@ -34,7 +34,14 @@ Look for moments where:
 - **The user encountered genuinely new information**: A tool, API, or behavior they hadn't seen before, and they recognized it as new
 - **The user connected previously separate knowledge**: Two things they knew independently turned out to be related in a way they hadn't realized
 
-A user asking questions, directing the agent, or providing corrections is NOT a learning signal — that is the user applying existing knowledge, not gaining new knowledge.
+**What is NOT a learning signal:**
+
+- A user asking questions, directing the agent, or providing corrections — that is the user applying existing knowledge, not gaining new knowledge
+- Facts the agent discovered through tool use or code investigation — the agent finding something is not the user learning it
+- Information the agent presented that the user simply acknowledged or accepted without visible surprise — receiving a report is not the same as a mental model shift
+- The user saying "ok", "got it", "thanks" after the agent explains something — acknowledgment is not evidence of changed understanding
+
+A valid TIL requires the user's **explicit reaction** showing their understanding changed: expressions of surprise, corrected expectations ("I thought X but it's actually Y"), or recognition of something as genuinely new ("I didn't know that").
 
 ### 2. Filter by Value
 
