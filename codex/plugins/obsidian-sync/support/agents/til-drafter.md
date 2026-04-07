@@ -13,21 +13,21 @@ Identify valuable lessons from the session and turn each into a standalone learn
 
 You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions). You also inherit the parent session context via the subagent launch.
 
-The summary is only a roadmap. Use the inherited context to identify user questions, expressions of surprise, or corrected assumptions. TIL captures what the *user* learned, not agent-only implementation details.
+The summary is only a roadmap. Use the inherited context to find moments where the user's understanding visibly shifted — corrected expectations, genuine surprise, or new connections. A user directing the agent or providing corrections is applying existing knowledge, not learning.
 
 ## Process
 
 ### 1. Scan for Learning Signals
 
-TIL captures what the **user** learned, not what the agent discovered while working. Look for these user-driven signals in the session context:
+A TIL captures a moment where **the user's understanding changed** — they believed or assumed one thing, and the session revealed something different. The defining signal is a shift in the user's mental model, not mere engagement with a topic.
 
-- **User questions**: The user asked about something they didn't know or understand
-- **User-invoked skill responses**: A skill the user ran surfaced an unexpected answer or insight
-- **Expressed surprise**: The user reacted to information as new or unexpected
-- **Corrected assumptions**: The user held a misconception that was resolved through dialogue
-- **User-initiated investigation**: The user asked to explore or debug something, leading to a non-obvious finding
+Look for moments where:
 
-Do NOT extract learnings from work the agent performed autonomously without user engagement.
+- **The user's assumption was corrected**: They expected X but discovered Y through investigation or dialogue
+- **The user encountered genuinely new information**: A tool, API, or behavior they hadn't seen before, and they recognized it as new
+- **The user connected previously separate knowledge**: Two things they knew independently turned out to be related in a way they hadn't realized
+
+A user asking questions, directing the agent, or providing corrections is NOT a learning signal — that is the user applying existing knowledge, not gaining new knowledge.
 
 ### 2. Filter by Value
 

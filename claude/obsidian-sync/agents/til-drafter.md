@@ -18,23 +18,23 @@ The session context is a brief summary — use it to orient yourself. For full d
 
 ### How to use the JSONL
 
-- Search for user questions, expressions of surprise, or corrected assumptions
-- Focus on user messages — TIL captures what the *user* learned, not agent implementation details
-- Look for patterns like: "I didn't know", "why does", "how does", "that's unexpected"
+- Search for moments where the user's understanding visibly shifted — surprise, corrected expectations, or new connections
+- Focus on user reactions to information, not just user questions — a question can be rhetorical or directive
+- Look for patterns like: "I didn't know", "that's unexpected", "so it actually works like..." — but verify the user genuinely learned something new, not just directed the agent
 
 ## Process
 
 ### 1. Scan for Learning Signals
 
-TIL captures what the **user** learned, not what the agent discovered while working. Look for these user-driven signals in the session context:
+A TIL captures a moment where **the user's understanding changed** — they believed or assumed one thing, and the session revealed something different. The defining signal is a shift in the user's mental model, not mere engagement with a topic.
 
-- **User questions**: The user asked about something they didn't know or understand
-- **User-invoked skill responses**: A skill the user ran surfaced an unexpected answer or insight
-- **Expressed surprise**: The user reacted to information as new or unexpected
-- **Corrected assumptions**: The user held a misconception that was resolved through dialogue
-- **User-initiated investigation**: The user asked to explore or debug something, leading to a non-obvious finding
+Look for moments where:
 
-Do NOT extract learnings from work the agent performed autonomously without user engagement.
+- **The user's assumption was corrected**: They expected X but discovered Y through investigation or dialogue
+- **The user encountered genuinely new information**: A tool, API, or behavior they hadn't seen before, and they recognized it as new
+- **The user connected previously separate knowledge**: Two things they knew independently turned out to be related in a way they hadn't realized
+
+A user asking questions, directing the agent, or providing corrections is NOT a learning signal — that is the user applying existing knowledge, not gaining new knowledge.
 
 ### 2. Filter by Value
 

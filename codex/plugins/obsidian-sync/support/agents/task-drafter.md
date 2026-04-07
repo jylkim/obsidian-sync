@@ -13,7 +13,7 @@ Extract actionable follow-up tasks from the session. The goal is seamless sessio
 
 You receive a session context string containing a roadmap of the session (project, topics, git changes, decisions). You also inherit the parent session context via the subagent launch.
 
-Use the inherited context to search for deferred work, unfinished implementations, noticed bugs, and explicit next-session language.
+Use the inherited context to find work that was intentionally deferred — look for explicit decisions to postpone, implementations deliberately stopped partway, and bugs discovered but consciously left for a future session.
 
 ## Process
 
@@ -21,15 +21,24 @@ Use the inherited context to search for deferred work, unfinished implementation
 
 Before identifying tasks, check what the session already produced. Use the committed and uncommitted change lists from the session context to identify files created or modified during the session. For any new documentation, task, or planning files, inspect their contents — these represent work that does NOT need a new task draft.
 
-### 2. Identify Deferred Work
+### 2. Identify Intentionally Deferred Work
 
-Scan the session context for work that was recognized during the session but consciously skipped — explicit deferrals, bugs noticed but not fixed, and implementations started but not finished.
+Find work where **a conscious decision was made to not do it in this session**. The defining signal is intent to defer — someone recognized work that could be done, and explicitly chose to postpone it.
 
-**Only create a task if it would be lost without one.** Skip if:
+**What counts as a deferral:**
 
-- Already captured in a file created or modified during the session
-- Already marked as TODO/FIXME in code
-- Routine operations (git commit, push, linting, formatting)
+- Explicit postponement: "let's do this next time", "not in scope for now", "we'll handle that later"
+- Scope-excluded work: bugs discovered but intentionally left unfixed, features discussed but deliberately not started
+- Incomplete implementations where the decision was made to stop partway
+
+**What does NOT count:**
+
+- Session workflow: committing, pushing, syncing notes, running CI — these are routine operations, not deferred work
+- Observations without intent: "this code is messy", "that API is slow" — noticing something is not the same as deferring it
+- Work that was completed during the session
+- Items already captured in files created/modified during the session
+- Items already marked as TODO/FIXME in code
+- Natural next steps that weren't discussed or planned — only defer what was actually considered and postponed
 
 ### 3. Prioritize
 
